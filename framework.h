@@ -15,6 +15,8 @@
 #include <tchar.h>
 #include <string>
 
+#include <commdlg.h>
+
 #include <objidl.h>
 #include <gdiplus.h>
 using namespace Gdiplus;

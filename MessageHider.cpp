@@ -2,10 +2,9 @@
 //
 
 #include "framework.h"
-#include "commdlg.h"
 #include "MessageHider.h"
 #include "ImageHandler.h"
-
+#include "AppHandler.h"
 
 #define MAX_LOADSTRING 100
 
@@ -160,18 +159,27 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
     case WM_CREATE:
         button = CreateWindow(L"BUTTON", L"Importer Image", WS_VISIBLE | WS_CHILD,
-            10, 10, 150, 30, hWnd, (HMENU)1, NULL, NULL);
+            10, 10, 150, 30, hWnd, (HMENU)IDM_OPEN_FILE, NULL, NULL);
 
         testButton = CreateWindow(L"BUTTON", L"C'est un test", WS_VISIBLE | WS_CHILD,
             10, 50, 150, 30, hWnd, (HMENU)2, NULL, NULL);
         break;
+    case WM_KEYDOWN:
+        if (GetKeyState(VK_CONTROL) & 0x8000)
+        {
+            switch (wParam)
+            {
+            case 'S':  // Ctrl + S
+                MessageBox(hWnd, L"Sauvegarder", L"Raccourci Ctrl+S", MB_OK);
+                break;
+            case 'O':  // Ctrl + O
+                AppHandler::OpenImage(hWnd, *imageHandler);
+                break;
+            }
+        }
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);
-            if (wmId == 1)  // Si le bouton est cliqué
-            {
-
-            }
             switch (wmId)
             {
             case IDM_ABOUT:
@@ -180,30 +188,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             case IDM_EXIT:
                 DestroyWindow(hWnd);
                 break;
-            case 1:
-            {
-                OPENFILENAME ofn;
-                wchar_t file_name[100] = { 0 };
-                ZeroMemory(&ofn, sizeof(OPENFILENAME));
-                ofn.lStructSize = sizeof(OPENFILENAME);
-                ofn.hwndOwner = hWnd;
-                ofn.lpstrFile = file_name;
-                ofn.nMaxFile = 100;
-                ofn.lpstrFilter = L"Images\0*.bmp;*.jpg;*.png;*.gif\0";
-                ofn.nFilterIndex = 1;
-                ofn.lpstrTitle = L"Sélectionnez une image";
-                ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-
-                if (GetOpenFileName(&ofn))
-                {
-                    if (imageHandler->Load(file_name))
-                    {
-                        InvalidateRect(hWnd, NULL, TRUE);
-                    }
-                }
-            }
+            case IDM_OPEN_FILE:
+                AppHandler::OpenImage(hWnd, *imageHandler);
                 break;
-            case 2:
+            case IDM_SAVE_FILE:
                 imageHandler->Write();
                 break;
             default:
@@ -221,9 +209,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 imageHandler->Draw(hdc, 10, 50);
                 // Graphics graphics(hdc);
                 // graphics.DrawImage(image, 10, 50);
-                std::string text = imageHandler->Read();
+                /*std::string text = imageHandler->Read();
                 std::wstring wideText = ConvertToWideString(text);
-                TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());
+                TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());*/
             }
 
             EndPaint(hWnd, &ps);
