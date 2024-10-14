@@ -1,0 +1,6 @@
+# Forcer l'encodage UTF-8 avec BOM pour les fichiers C++
+[.cpp]
+charset = utf-8-bom
+
+[.h]
+charset = utf-8-bom

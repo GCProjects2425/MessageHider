@@ -1,4 +1,4 @@
-// MessageHider.cpp : Définit le point d'entrée de l'application.
+﻿// MessageHider.cpp : Définit le point d'entrée de l'application.
 //
 
 #include "framework.h"
