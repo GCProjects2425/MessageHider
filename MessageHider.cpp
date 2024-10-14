@@ -2,13 +2,10 @@
 //
 
 #include "framework.h"
-#include "Windows.h"
 #include "commdlg.h"
 #include "MessageHider.h"
-#include <objidl.h>
-#include <gdiplus.h>
-using namespace Gdiplus;
-#pragma comment (lib,"Gdiplus.lib")
+#include "ImageHandler.h"
+
 
 #define MAX_LOADSTRING 100
 
@@ -134,6 +131,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
+std::wstring ConvertToWideString(const std::string& str)
+{
+    int size_needed = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), NULL, 0);
+    std::wstring wstr(size_needed, 0);
+    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), &wstr[0], size_needed);
+    return wstr;
+}
+
 //
 //  FONCTION : WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -147,18 +152,35 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     static HWND button;
-    static Gdiplus::Image* image = NULL;
+    static HWND testButton;
+    static ImageHandler* imageHandler = new ImageHandler();
+    //static Image* image = NULL;
 
     switch (message)
     {
     case WM_CREATE:
         button = CreateWindow(L"BUTTON", L"Importer Image", WS_VISIBLE | WS_CHILD,
             10, 10, 150, 30, hWnd, (HMENU)1, NULL, NULL);
+
+        testButton = CreateWindow(L"BUTTON", L"C'est un test", WS_VISIBLE | WS_CHILD,
+            10, 50, 150, 30, hWnd, (HMENU)2, NULL, NULL);
         break;
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);
-            if (LOWORD(wParam) == 1)  // Si le bouton est cliqué
+            if (wmId == 1)  // Si le bouton est cliqué
+            {
+
+            }
+            switch (wmId)
+            {
+            case IDM_ABOUT:
+                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+                break;
+            case IDM_EXIT:
+                DestroyWindow(hWnd);
+                break;
+            case 1:
             {
                 OPENFILENAME ofn;
                 wchar_t file_name[100] = { 0 };
@@ -174,18 +196,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
                 if (GetOpenFileName(&ofn))
                 {
-                    delete image;  // Supprimer l'image précédente si elle existe
-                    image = new Gdiplus::Image(file_name);
-                    InvalidateRect(hWnd, NULL, TRUE);  // Redessiner la fenêtre
+                    if (imageHandler->Load(file_name))
+                    {
+                        InvalidateRect(hWnd, NULL, TRUE);
+                    }
                 }
             }
-            switch (wmId)
-            {
-            case IDM_ABOUT:
-                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
                 break;
-            case IDM_EXIT:
-                DestroyWindow(hWnd);
+            case 2:
+                imageHandler->Write();
                 break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
@@ -196,10 +215,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-            if (image)
+
+            if (imageHandler->isValidImage())
             {
-                Graphics graphics(hdc);
-                graphics.DrawImage(image, 10, 50);
+                imageHandler->Draw(hdc, 10, 50);
+                // Graphics graphics(hdc);
+                // graphics.DrawImage(image, 10, 50);
+                std::string text = imageHandler->Read();
+                std::wstring wideText = ConvertToWideString(text);
+                TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());
             }
 
             EndPaint(hWnd, &ps);
