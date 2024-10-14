@@ -2,7 +2,13 @@
 //
 
 #include "framework.h"
+#include "Windows.h"
+#include "commdlg.h"
 #include "MessageHider.h"
+#include <objidl.h>
+#include <gdiplus.h>
+using namespace Gdiplus;
+#pragma comment (lib,"Gdiplus.lib")
 
 #define MAX_LOADSTRING 100
 
@@ -17,6 +23,19 @@ BOOL                InitInstance(HINSTANCE, int);
 LRESULT CALLBACK    WndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK    About(HWND, UINT, WPARAM, LPARAM);
 
+ULONG_PTR gdiplusToken;
+
+void InitGDIPlus()
+{
+    GdiplusStartupInput gdiplusStartupInput;
+    GdiplusStartup(&gdiplusToken, &gdiplusStartupInput, NULL);
+}
+
+void ShutdownGDIPlus()
+{
+    GdiplusShutdown(gdiplusToken);
+}
+
 int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
                      _In_opt_ HINSTANCE hPrevInstance,
                      _In_ LPWSTR    lpCmdLine,
@@ -25,7 +44,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
-    // TODO: Placez le code ici.
+    // Initialize GDI+.
+    InitGDIPlus();
 
     // Initialise les chaînes globales
     LoadStringW(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
@@ -52,6 +72,9 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
         }
     }
 
+    //shutdown GDI+
+    
+    ShutdownGDIPlus();
     return (int) msg.wParam;
 }
 
@@ -123,12 +146,39 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    static HWND button;
+    static Gdiplus::Image* image = NULL;
+
     switch (message)
     {
+    case WM_CREATE:
+        button = CreateWindow(L"BUTTON", L"Importer Image", WS_VISIBLE | WS_CHILD,
+            10, 10, 150, 30, hWnd, (HMENU)1, NULL, NULL);
+        break;
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);
-            // Analyse les sélections de menu :
+            if (LOWORD(wParam) == 1)  // Si le bouton est cliqué
+            {
+                OPENFILENAME ofn;
+                wchar_t file_name[100] = { 0 };
+                ZeroMemory(&ofn, sizeof(OPENFILENAME));
+                ofn.lStructSize = sizeof(OPENFILENAME);
+                ofn.hwndOwner = hWnd;
+                ofn.lpstrFile = file_name;
+                ofn.nMaxFile = 100;
+                ofn.lpstrFilter = L"Images\0*.bmp;*.jpg;*.png;*.gif\0";
+                ofn.nFilterIndex = 1;
+                ofn.lpstrTitle = L"Sélectionnez une image";
+                ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+
+                if (GetOpenFileName(&ofn))
+                {
+                    delete image;  // Supprimer l'image précédente si elle existe
+                    image = new Gdiplus::Image(file_name);
+                    InvalidateRect(hWnd, NULL, TRUE);  // Redessiner la fenêtre
+                }
+            }
             switch (wmId)
             {
             case IDM_ABOUT:
@@ -146,7 +196,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-            // TODO: Ajoutez ici le code de dessin qui utilise hdc...
+            if (image)
+            {
+                Graphics graphics(hdc);
+                graphics.DrawImage(image, 10, 50);
+            }
+
             EndPaint(hWnd, &ps);
         }
         break;
