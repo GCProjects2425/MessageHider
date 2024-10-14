@@ -5,6 +5,7 @@
 #include "commdlg.h"
 #include "MessageHider.h"
 #include "ImageHandler.h"
+#include "Interface.h"
 
 
 #define MAX_LOADSTRING 100
@@ -156,9 +157,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     static ImageHandler* imageHandler = new ImageHandler();
     //static Image* image = NULL;
 
+    static Interface* uiInterface = new Interface(hWnd);
+
     switch (message)
     {
     case WM_CREATE:
+
+        uiInterface->CreateInterface();
+
         button = CreateWindow(L"BUTTON", L"Importer Image", WS_VISIBLE | WS_CHILD,
             10, 10, 150, 30, hWnd, (HMENU)1, NULL, NULL);
 
@@ -167,6 +173,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         break;
     case WM_COMMAND:
         {
+
+            for (auto button : uiInterface->buttons)
+                button.HandleCommand(wParam);
+
             int wmId = LOWORD(wParam);
             if (wmId == 1)  // Si le bouton est cliqué
             {
