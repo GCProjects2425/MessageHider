@@ -172,6 +172,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         /*button = CreateWindow(L"BUTTON", L"Importer Image", WS_VISIBLE | WS_CHILD,
             10, 10, 150, 30, hWnd, (HMENU)IDM_OPEN_FILE, NULL, NULL);
 
+        /*testButton = CreateWindow(L"BUTTON", L"C'est un test", WS_VISIBLE | WS_CHILD,
+            10, 50, 150, 30, hWnd, (HMENU)IDM_SAVE_FILE, NULL, NULL);*/
 
         /*saveButton = CreateWindow(L"BUTTON", L"Sauvegarder", WS_VISIBLE | WS_CHILD,
             10, 90, 150, 30, hWnd, (HMENU)IDM_SAVE_FILE, NULL, NULL);*/
