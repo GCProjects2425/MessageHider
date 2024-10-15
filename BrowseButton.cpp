@@ -2,7 +2,7 @@
 
 void BrowseButton::HandleCommand(WPARAM wParam)
 {
-    
+    BrowseForFile();
 }
 
 void BrowseButton::BrowseForFile()
