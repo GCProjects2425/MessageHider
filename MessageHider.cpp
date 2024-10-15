@@ -205,6 +205,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 break;
             case 2:
                 imageHandler->Write();
+
                 break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
