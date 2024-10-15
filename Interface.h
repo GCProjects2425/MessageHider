@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "Button.h"
+#include "UIElement.h"
 #include <vector>
 
 class Interface
@@ -11,7 +11,9 @@ public:
     ~Interface();
 
     void CreateInterface();
-    std::vector<Button> buttons;
+    void HandleCommands(WPARAM wParam);
+
+    std::vector<UIElement*> elements;
 
 private:
     HWND parentWindow;

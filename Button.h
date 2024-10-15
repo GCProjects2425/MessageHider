@@ -1,21 +1,16 @@
 ﻿#pragma once
 
-#include <windows.h>
 #include "UIElement.h"
 
 class Button : public UIElement
 {
 public:
-    Button();
+    Button(HWND hParentWnd, int x, int y, int width, int height, int id, LPCWSTR text)
+        : UIElement(hParentWnd, x, y, width, height, id, text) {m_type = L"BUTTON";};
     ~Button();
 
-    void CreateButton(HWND hParentWnd, int x, int y, int width, int height, int id, LPCWSTR text);
-
-    // Méthode pour gérer les événements
-    void HandleCommand(WPARAM wParam);
+    void HandleCommand(WPARAM wParam) override;
 
 private:
-    HWND hButton;
-    int buttonId;
 };
 
