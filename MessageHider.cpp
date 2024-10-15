@@ -1,4 +1,4 @@
-// MessageHider.cpp : Définit le point d'entrée de l'application.
+﻿// MessageHider.cpp : Définit le point d'entrée de l'application.
 //
 
 #include "framework.h"
@@ -6,6 +6,8 @@
 #include "ImageHandler.h"
 #include "AppHandler.h"
 #include "ErrorHandler.h"
+#include "Interface.h"
+
 
 #define MAX_LOADSTRING 100
 
@@ -159,6 +161,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     static ImageHandler* imageHandler = new ImageHandler();
     //static Image* image = NULL;
 
+    static Interface* uiInterface = new Interface(hWnd);
+
     switch (message)
     {
     case WM_CREATE:
@@ -170,6 +174,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         saveButton = CreateWindow(L"BUTTON", L"Sauvegarder", WS_VISIBLE | WS_CHILD,
             10, 90, 150, 30, hWnd, (HMENU)3, NULL, NULL);
+
+        uiInterface->CreateInterface();
+
         break;
     case WM_KEYDOWN:
         if (GetKeyState(VK_CONTROL) & 0x8000)
@@ -185,7 +192,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
     case WM_COMMAND:
+
+        uiInterface->HandleCommands(wParam);
         {
+
             int wmId = LOWORD(wParam);
             switch (wmId)
             {

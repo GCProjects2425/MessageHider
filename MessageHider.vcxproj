@@ -81,6 +81,10 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+      <AdditionalManifestFiles>$(ProjectDir)app.manifest %(AdditionalManifestFiles)</AdditionalManifestFiles>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -97,6 +101,10 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+      <AdditionalManifestFiles>$(ProjectDir)app.manifest %(AdditionalManifestFiles)</AdditionalManifestFiles>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -110,6 +118,10 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+      <AdditionalManifestFiles>$(ProjectDir)app.manifest %(AdditionalManifestFiles)</AdditionalManifestFiles>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -127,23 +139,47 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>gdiplus.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+      <AdditionalManifestFiles>$(ProjectDir)app.manifest %(AdditionalManifestFiles)</AdditionalManifestFiles>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AppHandler.h" />
     <ClInclude Include="ErrorHandler.h" />
+    <ClInclude Include="ActionButton.h" />
+    <ClInclude Include="BrowseButton.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="ButtonsHeaders.h" />
+    <ClInclude Include="ElementsHeaders.h" />
+    <ClInclude Include="Field.h" />
     <ClInclude Include="framework.h" />
+    <ClInclude Include="ImageField.h" />
     <ClInclude Include="ImageHandler.h" />
+    <ClInclude Include="Interface.h" />
     <ClInclude Include="MessageHider.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Steganography.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="TextField.h" />
+    <ClInclude Include="UIElement.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppHandler.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
+    <ClCompile Include="ActionButton.cpp" />
+    <ClCompile Include="BrowseButton.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="ButtonsHeaders.cpp" />
+    <ClCompile Include="ElementsHeaders.cpp" />
+    <ClCompile Include="Field.cpp" />
+    <ClCompile Include="ImageField.cpp" />
     <ClCompile Include="ImageHandler.cpp" />
+    <ClCompile Include="Interface.cpp" />
     <ClCompile Include="MessageHider.cpp" />
     <ClCompile Include="Steganography.cpp" />
+    <ClCompile Include="TextField.cpp" />
+    <ClCompile Include="UIElement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="MessageHider.rc" />
@@ -151,6 +187,9 @@
   <ItemGroup>
     <Image Include="MessageHider.ico" />
     <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="app.manifest" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
