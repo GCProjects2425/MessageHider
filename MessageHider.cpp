@@ -152,6 +152,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     static HWND button;
     static HWND testButton;
+    static HWND saveButton;
     static ImageHandler* imageHandler = new ImageHandler();
     //static Image* image = NULL;
 
@@ -163,6 +164,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
         testButton = CreateWindow(L"BUTTON", L"C'est un test", WS_VISIBLE | WS_CHILD,
             10, 50, 150, 30, hWnd, (HMENU)2, NULL, NULL);
+
+        saveButton = CreateWindow(L"BUTTON", L"Sauvegarder", WS_VISIBLE | WS_CHILD,
+            10, 50, 150, 30, hWnd, (HMENU)3, NULL, NULL);
         break;
     case WM_KEYDOWN:
         if (GetKeyState(VK_CONTROL) & 0x8000)
@@ -193,7 +197,28 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 break;
             case IDM_SAVE_FILE:
                 imageHandler->Write();
+            }
                 break;
+            case 3:
+            {
+                // Boîte de dialogue pour enregistrer l'image
+                OPENFILENAME ofn;
+                wchar_t save_file_name[100] = { 0 };
+                ZeroMemory(&ofn, sizeof(OPENFILENAME));
+                ofn.lStructSize = sizeof(OPENFILENAME);
+                ofn.hwndOwner = hWnd;
+                ofn.lpstrFile = save_file_name;
+                ofn.nMaxFile = sizeof(save_file_name);
+                ofn.lpstrFilter = L"Images\0*.png;*.jpg;*.bmp;*.gif\0";
+                ofn.nFilterIndex = 1;
+                ofn.lpstrTitle = L"Sauvegarder l'image";
+                ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+
+                if (GetSaveFileName(&ofn))  // Si l'utilisateur sélectionne un fichier
+                {
+                    imageHandler->Save(save_file_name);
+                }
+            }
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
@@ -207,9 +232,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             if (imageHandler->isValidImage())
             {
                 imageHandler->Draw(hdc, 10, 50);
-                // Graphics graphics(hdc);
-                // graphics.DrawImage(image, 10, 50);
-                /*std::string text = imageHandler->Read();
+                std::string text = imageHandler->Read();
                 std::wstring wideText = ConvertToWideString(text);
                 TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());*/
             }
