@@ -20,10 +20,12 @@ void Interface::CreateInterface()
     elements.push_back(filtersField);
     UIElement* propertiesField = new ImageField(parentWindow, 1350, 140, 520, 780, 6, L"");
     elements.push_back(propertiesField);
-    UIElement* exportButton = new BrowseButton(parentWindow, 1630, 970, 250, 40, 7, L"Export");
+    UIElement* encryptButton = new ActionButton(parentWindow, 1630, 940, 250, 40, 7, L"Encrypt");
+    elements.push_back(encryptButton);
+    UIElement* decryptButton = new ActionButton(parentWindow, 1350, 940, 250, 40, 8, L"Decrypt");
+    elements.push_back(decryptButton);
+    UIElement* exportButton = new BrowseButton(parentWindow, 1350, 1000, 520, 40, 9, L"Export");
     elements.push_back(exportButton);
-    UIElement* decodeButton = new ActionButton(parentWindow, 1350, 970, 250, 40, 8, L"Decode");
-    elements.push_back(decodeButton);
 
 
     for (auto element : elements) 

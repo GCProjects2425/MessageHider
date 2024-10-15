@@ -129,6 +129,9 @@
     <Image Include="MessageHider.ico">
       <Filter>Fichiers de ressources</Filter>
     </Image>
+    <Image Include="Logo.ico">
+      <Filter>Fichiers de ressources</Filter>
+    </Image>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="app.manifest" />

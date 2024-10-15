@@ -185,6 +185,7 @@
     <ResourceCompile Include="MessageHider.rc" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Logo.ico" />
     <Image Include="MessageHider.ico" />
     <Image Include="small.ico" />
   </ItemGroup>
