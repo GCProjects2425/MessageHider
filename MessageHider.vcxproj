@@ -129,6 +129,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AppHandler.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ImageHandler.h" />
     <ClInclude Include="MessageHider.h" />
@@ -136,6 +137,7 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AppHandler.cpp" />
     <ClCompile Include="ImageHandler.cpp" />
     <ClCompile Include="MessageHider.cpp" />
   </ItemGroup>
