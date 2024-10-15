@@ -23,5 +23,6 @@ protected:
 	LPCWSTR m_text;
 
 	const wchar_t* m_type;
+	long m_style;
 };
 

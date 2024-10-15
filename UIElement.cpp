@@ -11,11 +11,12 @@ UIElement::UIElement(HWND hParentWnd, int x, int y, int width, int height, int i
 	m_text = text;
 
 	m_type = nullptr;
+	m_style = NULL;
 }
 
 void UIElement::CreateElement()
 {
-	hElement = CreateWindow(m_type, m_text, WS_VISIBLE | WS_CHILD | WS_BORDER | LBS_NOTIFY,
+	hElement = CreateWindow(m_type, m_text, m_style,
 		m_x, m_y, m_width, m_height, m_parentWnd, (HMENU)m_id,
 		(HINSTANCE)GetWindowLongPtr(m_parentWnd, GWLP_HINSTANCE), NULL);
 }
