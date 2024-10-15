@@ -1,4 +1,5 @@
 #include "UIElement.h"
+#include "Interface.h"
 
 UIElement::UIElement(HWND hParentWnd, int x, int y, int width, int height, int id, LPCWSTR text)
 {
@@ -28,8 +29,12 @@ void UIElement::CreateElement()
 		height = rect.bottom - rect.top;
 	}
 
+	
 	m_hElement = CreateWindow(m_type, m_text, m_style,
-		m_x, m_y, m_width, m_height, m_parentWnd, (HMENU)m_id,
-		(HINSTANCE)GetWindowLongPtr(m_parentWnd, GWLP_HINSTANCE), NULL);
+		(m_x * width)/ Interface::refWidth, //Pos X
+		(m_y * height) / Interface::refHeight, //Pos Y
+		(m_width * width) / Interface::refWidth, //Width
+		(m_height * height) / Interface::refHeight, //Height
+		m_parentWnd, (HMENU)m_id, (HINSTANCE)GetWindowLongPtr(m_parentWnd, GWLP_HINSTANCE), NULL);
 }
 

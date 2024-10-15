@@ -15,6 +15,12 @@ public:
 
     std::vector<UIElement*> elements;
 
+    static const int refWidth = 1920;
+    static const int refHeight = 1080;
+
+    static float scale;
+
+
 private:
     HWND parentWindow;
 
