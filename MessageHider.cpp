@@ -163,10 +163,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             10, 10, 150, 30, hWnd, (HMENU)IDM_OPEN_FILE, NULL, NULL);
 
         testButton = CreateWindow(L"BUTTON", L"C'est un test", WS_VISIBLE | WS_CHILD,
-            10, 50, 150, 30, hWnd, (HMENU)2, NULL, NULL);
+            10, 50, 150, 30, hWnd, (HMENU)IDM_SAVE_FILE, NULL, NULL);
 
         saveButton = CreateWindow(L"BUTTON", L"Sauvegarder", WS_VISIBLE | WS_CHILD,
-            10, 50, 150, 30, hWnd, (HMENU)3, NULL, NULL);
+            10, 90, 150, 30, hWnd, (HMENU)3, NULL, NULL);
         break;
     case WM_KEYDOWN:
         if (GetKeyState(VK_CONTROL) & 0x8000)
@@ -197,7 +197,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 break;
             case IDM_SAVE_FILE:
                 imageHandler->Write();
-            }
                 break;
             case 3:
             {
@@ -219,6 +218,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     imageHandler->Save(save_file_name);
                 }
             }
+                break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
@@ -234,7 +234,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 imageHandler->Draw(hdc, 10, 50);
                 std::string text = imageHandler->Read();
                 std::wstring wideText = ConvertToWideString(text);
-                TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());*/
+                TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());
             }
 
             EndPaint(hWnd, &ps);
