@@ -18,8 +18,10 @@ public:
 	bool Load(const wchar_t* filePath);
 	void Draw(HDC hdc, int x, int y);
 
-	void Write();
 	std::string Read();
+	void Write();
+	
+	void Save(const wchar_t* filePath);
 
 	bool isValidImage();
 

@@ -1,5 +1,7 @@
 #include "ImageHandler.h"
 
+using namespace std;
+
 void ImageHandler::DestroyImage()
 {
 	delete m_Image;  // Supprimer l'image précédente si elle existe
@@ -33,13 +35,39 @@ void ImageHandler::Write()
 	}
 }
 
+void ImageHandler::Save(const wchar_t* filePath)
+{
+	if (isValidImage())
+	{
+		Bitmap* bitmap = ToBitmap();
+		CLSID imageClsid;
+
+		wstring fileExtension = filePath;
+		if (fileExtension.find(L".jpg") != wstring::npos || fileExtension.find(L".jpeg") != wstring::npos)
+		{
+			GetEncoderClsid(L"image/jpeg", &imageClsid);  // Encodeur JPEG
+		}
+		else if (fileExtension.find(L".bmp") != wstring::npos)
+		{
+			GetEncoderClsid(L"image/bmp", &imageClsid);   // Encodeur BMP
+		}
+		else
+		{
+			GetEncoderClsid(L"image/png", &imageClsid);   // Par défaut : encodeur PNG
+		}
+		bitmap->Save(filePath, &imageClsid, NULL);
+	}
+}
+
+
+
 std::string ImageHandler::Read()
 {
 	std::string textEncoded = "";
 	if (isValidImage())
 	{
 		Bitmap* bitmap = ToBitmap();
-		textEncoded = ReadTextInBitmap(bitmap);
+		//textEncoded = ReadTextInBitmap(bitmap);
 		
 	}
 

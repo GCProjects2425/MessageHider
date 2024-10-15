@@ -162,7 +162,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         button = CreateWindow(L"BUTTON", L"Importer Image", WS_VISIBLE | WS_CHILD,
             10, 10, 150, 30, hWnd, (HMENU)1, NULL, NULL);
 
-        testButton = CreateWindow(L"BUTTON", L"C'est un test", WS_VISIBLE | WS_CHILD,
+        testButton = CreateWindow(L"BUTTON", L"Sauvegarder", WS_VISIBLE | WS_CHILD,
             10, 50, 150, 30, hWnd, (HMENU)2, NULL, NULL);
         break;
     case WM_COMMAND:
@@ -204,7 +204,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
                 break;
             case 2:
-                imageHandler->Write();
+            {
+                //imageHandler->Write();
+                // Boîte de dialogue pour enregistrer l'image
+                OPENFILENAME ofn;
+                wchar_t save_file_name[100] = { 0 };  
+                ZeroMemory(&ofn, sizeof(OPENFILENAME));
+                ofn.lStructSize = sizeof(OPENFILENAME);
+                ofn.hwndOwner = hWnd;
+                ofn.lpstrFile = save_file_name;
+                ofn.nMaxFile = sizeof(save_file_name);
+                ofn.lpstrFilter = L"Images\0*.png;*.jpg;*.bmp;*.gif\0";
+                ofn.nFilterIndex = 1;
+                ofn.lpstrTitle = L"Sauvegarder l'image";
+                ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
+
+                if (GetSaveFileName(&ofn))  // Si l'utilisateur sélectionne un fichier
+                {
+                    imageHandler->Save(save_file_name);
+                }
+            }
                 break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
@@ -219,8 +238,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             if (imageHandler->isValidImage())
             {
                 imageHandler->Draw(hdc, 10, 50);
-                // Graphics graphics(hdc);
-                // graphics.DrawImage(image, 10, 50);
                 std::string text = imageHandler->Read();
                 std::wstring wideText = ConvertToWideString(text);
                 TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());
