@@ -13,9 +13,6 @@ public:
     };
 
     ~Button();
-
-    void HandleCommand(WPARAM wParam) override;
-
 private:
 };
 

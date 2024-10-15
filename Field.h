@@ -11,8 +11,5 @@ public:
 
 	};
 	~Field() {};
-
-
-protected:
 };
 

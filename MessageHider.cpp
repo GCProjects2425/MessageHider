@@ -8,7 +8,6 @@
 #include "ErrorHandler.h"
 #include "Interface.h"
 
-
 #define MAX_LOADSTRING 100
 
 // Variables globales :
@@ -123,7 +122,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    int screenHeight = GetSystemMetrics(SM_CYSCREEN);
 
    HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
-      CW_USEDEFAULT, 0, screenWidth * 0.60, screenHeight * 0.60, nullptr, nullptr, hInstance, nullptr);
+      CW_USEDEFAULT, 0, screenWidth, screenHeight, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
    {
@@ -131,6 +130,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    }
 
    ErrorHandler* errorHandler = new ErrorHandler(&hWnd);
+
+   AppHandler::SetHWND(hWnd);
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
@@ -166,6 +167,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     static Interface* uiInterface = new Interface(hWnd);
 
+    uiInterface->HandleCommands(message);
+
     switch (message)
     {
     case WM_CREATE:
@@ -189,13 +192,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 MessageBox(hWnd, L"Sauvegarder", L"Raccourci Ctrl+S", MB_OK);
                 break;
             case 'O':  // Ctrl + O
-                AppHandler::OpenImage(hWnd, *imageHandler);
+                AppHandler::OpenImage();
                 break;
             }
         }
     case WM_COMMAND:
 
-        uiInterface->HandleCommands(wParam);
         {
 
             int wmId = LOWORD(wParam);
@@ -208,16 +210,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 DestroyWindow(hWnd);
                 break;
             case IDM_OPEN_FILE:
-                AppHandler::OpenImage(hWnd, *imageHandler);
+                AppHandler::OpenImage();
                 break;
             case IDM_SAVE_FILE:
-                AppHandler::SaveImage(hWnd, *imageHandler);
+                AppHandler::SaveImage();
+                break;
+            case IDM_HIDE_MESSAGE:
+                imageHandler->Write();
                 break;
             case IDM_ERROR_TEST:
                 ErrorHandler::GetInstance()->Error(ErrorHandler::ErrorType::ERROR_TEST);
-                break;
-            case 2:
-                imageHandler->Write();
                 break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);

@@ -11,13 +11,5 @@ public:
 		m_style = WS_VISIBLE | WS_CHILD | LBS_NOTIFY;
 
 	};
-
-
-	void HandleCommand(WPARAM wParam) override;
-
-	void BrowseForFile(); // Load
-
-	void BrowseForDirectory(); //Save
-
 };
 

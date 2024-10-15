@@ -10,8 +10,5 @@ public:
 		m_style = WS_VISIBLE | WS_CHILD | WS_BORDER | ES_LEFT | ES_MULTILINE ;
 	};
 	~TextField() {};
-
-
-protected:
 };
 

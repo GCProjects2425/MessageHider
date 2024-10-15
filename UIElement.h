@@ -9,10 +9,10 @@ public:
 	~UIElement() {};
 
 	virtual void CreateElement();
-	virtual void HandleCommand(WPARAM wParam) {};
+	virtual void HandleCommand(UINT message) {};
 
 protected:
-	HWND hElement = nullptr;
+	HWND m_hElement;
 
 	HWND m_parentWnd;
 	int m_x;

@@ -11,7 +11,7 @@ public:
     ~Interface();
 
     void CreateInterface();
-    void HandleCommands(WPARAM wParam);
+    void HandleCommands(UINT message);
 
     std::vector<UIElement*> elements;
 

@@ -1,4 +1,6 @@
+#include <cstdlib>
 #include "ImageHandler.h"
+#include "AppHandler.h"
 
 using namespace std;
 #include"Steganography.h"
@@ -26,11 +28,15 @@ void ImageHandler::Write()
 {
 	if (isValidImage())
 	{
-		Bitmap* bitmap = ToBitmap();
-		WriteTextInBitmap(bitmap, "Salut ceci est un text");
+		int imageLength = m_Image->GetHeight() * m_Image->GetWidth();
+		wchar_t* buffer = new wchar_t[imageLength];
+		GetDlgItemText(AppHandler::GetHWND(), 69, buffer, imageLength);
 
-		CLSID pngClsid;
-		GetEncoderClsid(L"image/png", &pngClsid);
+		Bitmap* bitmap = ToBitmap();
+		WriteTextInBitmap(bitmap, WCharToString(buffer));
+
+		/*CLSID pngClsid;
+		GetEncoderClsid(L"image/png", &pngClsid);*/
 	}
 }
 
@@ -130,3 +136,11 @@ int ImageHandler::GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
 	free(pImageCodecInfo);
 	return -1;
 }
+
+std::string ImageHandler::WCharToString(const wchar_t* wstr) {
+	std::wstring ws(wstr);
+	std::string str(ws.begin(), ws.end());
+	return str;
+}
+
+ImageHandler* ImageHandler::m_Instance = nullptr;

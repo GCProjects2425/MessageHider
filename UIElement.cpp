@@ -12,11 +12,23 @@ UIElement::UIElement(HWND hParentWnd, int x, int y, int width, int height, int i
 
 	m_type = nullptr;
 	m_style = NULL;
+
+	m_hElement = nullptr;
 }
 
 void UIElement::CreateElement()
 {
-	hElement = CreateWindow(m_type, m_text, m_style,
+	RECT rect;
+	int width = m_width;
+	int height = m_height;
+
+	if (GetWindowRect(m_parentWnd, &rect))
+	{
+		width = rect.right - rect.left;
+		height = rect.bottom - rect.top;
+	}
+
+	m_hElement = CreateWindow(m_type, m_text, m_style,
 		m_x, m_y, m_width, m_height, m_parentWnd, (HMENU)m_id,
 		(HINSTANCE)GetWindowLongPtr(m_parentWnd, GWLP_HINSTANCE), NULL);
 }
