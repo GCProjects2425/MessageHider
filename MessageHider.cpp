@@ -172,14 +172,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         /*button = CreateWindow(L"BUTTON", L"Importer Image", WS_VISIBLE | WS_CHILD,
             10, 10, 150, 30, hWnd, (HMENU)IDM_OPEN_FILE, NULL, NULL);
 
-        testButton = CreateWindow(L"BUTTON", L"C'est un test", WS_VISIBLE | WS_CHILD,
-            10, 50, 150, 30, hWnd, (HMENU)IDM_SAVE_FILE, NULL, NULL);
 
-        saveButton = CreateWindow(L"BUTTON", L"Sauvegarder", WS_VISIBLE | WS_CHILD,
-            10, 90, 150, 30, hWnd, (HMENU)3, NULL, NULL);*/
+        /*saveButton = CreateWindow(L"BUTTON", L"Sauvegarder", WS_VISIBLE | WS_CHILD,
+            10, 90, 150, 30, hWnd, (HMENU)IDM_SAVE_FILE, NULL, NULL);*/
 
         uiInterface->CreateInterface();
-
         break;
     case WM_KEYDOWN:
         if (GetKeyState(VK_CONTROL) & 0x8000)
@@ -212,28 +209,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 AppHandler::OpenImage(hWnd, *imageHandler);
                 break;
             case IDM_SAVE_FILE:
-                imageHandler->Write();
+                AppHandler::SaveImage(hWnd, *imageHandler);
                 break;
-            case 3:
-            {
-                // Boîte de dialogue pour enregistrer l'image
-                OPENFILENAME ofn;
-                wchar_t save_file_name[100] = { 0 };
-                ZeroMemory(&ofn, sizeof(OPENFILENAME));
-                ofn.lStructSize = sizeof(OPENFILENAME);
-                ofn.hwndOwner = hWnd;
-                ofn.lpstrFile = save_file_name;
-                ofn.nMaxFile = sizeof(save_file_name);
-                ofn.lpstrFilter = L"Images\0*.png;*.jpg;*.bmp;*.gif\0";
-                ofn.nFilterIndex = 1;
-                ofn.lpstrTitle = L"Sauvegarder l'image";
-                ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST | OFN_OVERWRITEPROMPT;
-
-                if (GetSaveFileName(&ofn))  // Si l'utilisateur sélectionne un fichier
-                {
-                    imageHandler->Save(save_file_name);
-                }
-            }
             case IDM_ERROR_TEST:
                 ErrorHandler::GetInstance()->Error(ErrorHandler::ErrorType::ERROR_TEST);
                 break;
