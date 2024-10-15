@@ -112,4 +112,7 @@
       <Filter>Fichiers de ressources</Filter>
     </Image>
   </ItemGroup>
+  <ItemGroup>
+    <Xml Include="app.manifest" />
+  </ItemGroup>
 </Project>
