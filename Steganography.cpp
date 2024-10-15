@@ -1,44 +1,62 @@
 #include "Steganography.h"
-void Steganography::HideMessage(Gdiplus::Bitmap* bitmap, const std::string& message) {
-    Rect rect(0, 0, bitmap->GetWidth(), bitmap->GetHeight());
-    BitmapData bitmapData;
+void Steganography::HideMessage(Gdiplus::Bitmap* bitmap, const std::string& text) {
+	int width = bitmap->GetWidth();
+	int height = bitmap->GetHeight();
+	int messageLength = text.size();
 
-    // Verrouiller les bits de l'image pour modification
-    bitmap->LockBits(&rect, ImageLockModeWrite, PixelFormat32bppARGB, &bitmapData);
+	int bitIndex = 0;
+	for (int i = 0; i < height; ++i) {
+		for (int j = 0; j < width; ++j) {
+			Color pixelColor;
+			bitmap->GetPixel(j, i, &pixelColor);
 
-    UINT* pixels = (UINT*)bitmapData.Scan0;
-    int width = bitmap->GetWidth();
-    int height = bitmap->GetHeight();
-    int pixelCount = width * height;
+			// Obtenir le caractère à encoder
+			if (bitIndex < messageLength * 8) {
+				char currentChar = text[bitIndex / 8];
+				// Encoder le bit dans le canal bleu
+				int bitToEncode = (currentChar >> (7 - (bitIndex % 8))) & 1;
+				int newBlue = (pixelColor.GetB() & ~1) | bitToEncode; // Modifier le bit de poids faible du canal bleu
+				pixelColor = Color(pixelColor.GetA(), pixelColor.GetR(), pixelColor.GetG(), newBlue);
+				bitmap->SetPixel(j, i, pixelColor);
+				bitIndex++;
+			}
+			else {
+				// Si le message est complètement encodé, arrêter
+				return;
+			}
+		}
+	}
+}
 
-    int charIndex = 0;
-    int bitIndex = 0;
-    char currentChar = message[charIndex];
+std::string Steganography::ExtractMessage(Gdiplus::Bitmap* bitmap)
+{
+	std::string message;
+	int width = bitmap->GetWidth();
+	int height = bitmap->GetHeight();
 
-    for (int i = 0; i < pixelCount && charIndex < message.size(); ++i) {
-        UINT* pixel = pixels + i;
+	int bitIndex = 0;
+	char currentChar = 0;
+	for (int i = 0; i < height; ++i) {
+		for (int j = 0; j < width; ++j) {
+			Color pixelColor;
+			bitmap->GetPixel(j, i, &pixelColor);
 
-        for (int colorIndex = 0; colorIndex < 3; ++colorIndex) {
-            BYTE* colorComponent = ((BYTE*)pixel) + colorIndex;
+			// Lire le bit de poids faible du canal bleu 
+			int bitValue = pixelColor.GetB() & 1;  // Lire le bit du canal bleu
+			currentChar = (currentChar << 1) | bitValue;
+			bitIndex++;
 
-            *colorComponent &= 0xFC; // Supprimer les 2 derniers bits du composant
-            *colorComponent |= ((currentChar >> (bitIndex * 2)) & 0x03); // Insérer les bits du message
+			// Ajouter le caractère à la chaîne de message lorsque 8 bits ont été lus
+			if (bitIndex == 8) {
+				// Vérifier si c'est la fin du message
+				if (currentChar == '\0') {
+					return message;  // Arrêter la lecture lorsqu'on rencontre '\0'
+				}
+				message += currentChar;
+				currentChar = 0;  // Réinitialiser pour le prochain caractère
+				bitIndex = 0;  // Réinitialiser l'index des bits
+			}
+		}
+	}
 
-            bitIndex++;
-
-            if (bitIndex == 4) { // Si on a caché tous les bits d'un caractère
-                bitIndex = 0;
-                charIndex++;
-                if (charIndex < message.size()) {
-                    currentChar = message[charIndex]; // Passer au caractère suivant
-                }
-                else {
-                    currentChar = '\0'; // Indiquer la fin du texte
-                }
-            }
-        }
-    }
-
-    // Déverrouiller les bits après modification
-    bitmap->UnlockBits(&bitmapData);
 }

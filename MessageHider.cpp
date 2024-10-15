@@ -219,7 +219,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             if (imageHandler->isValidImage())
             {
-                imageHandler->Draw(hdc, 10, 50);
+                imageHandler->Draw(hdc, 10, 250);
                 // Graphics graphics(hdc);
                 // graphics.DrawImage(image, 10, 50);
                 std::string text = imageHandler->Read();
