@@ -31,7 +31,6 @@ void ImageHandler::Write()
 
 		CLSID pngClsid;
 		GetEncoderClsid(L"image/png", &pngClsid);
-		bitmap->Save(L"test.png", &pngClsid, NULL);
 	}
 }
 

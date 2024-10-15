@@ -153,6 +153,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     static HWND button;
     static HWND testButton;
+    static HWND saveButton;
     static ImageHandler* imageHandler = new ImageHandler();
     //static Image* image = NULL;
 
@@ -162,8 +163,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         button = CreateWindow(L"BUTTON", L"Importer Image", WS_VISIBLE | WS_CHILD,
             10, 10, 150, 30, hWnd, (HMENU)1, NULL, NULL);
 
-        testButton = CreateWindow(L"BUTTON", L"Sauvegarder", WS_VISIBLE | WS_CHILD,
+        testButton = CreateWindow(L"BUTTON", L"C'est un test", WS_VISIBLE | WS_CHILD,
             10, 50, 150, 30, hWnd, (HMENU)2, NULL, NULL);
+
+        saveButton = CreateWindow(L"BUTTON", L"Sauvegarder", WS_VISIBLE | WS_CHILD,
+            10, 50, 150, 30, hWnd, (HMENU)3, NULL, NULL);
         break;
     case WM_COMMAND:
         {
@@ -205,10 +209,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 break;
             case 2:
             {
-                //imageHandler->Write();
+                imageHandler->Write();
+            }
+                break;
+            case 3:
+            {
                 // Boîte de dialogue pour enregistrer l'image
                 OPENFILENAME ofn;
-                wchar_t save_file_name[100] = { 0 };  
+                wchar_t save_file_name[100] = { 0 };
                 ZeroMemory(&ofn, sizeof(OPENFILENAME));
                 ofn.lStructSize = sizeof(OPENFILENAME);
                 ofn.hwndOwner = hWnd;
@@ -224,7 +232,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     imageHandler->Save(save_file_name);
                 }
             }
-                break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
