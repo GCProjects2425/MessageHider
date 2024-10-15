@@ -8,17 +8,17 @@ Interface::~Interface(){}
 
 void Interface::CreateInterface()
 {
-    UIElement* loadImageButton = new BrowseButton(parentWindow, 70, 80, 250, 40, 1, L"Load Image");
+    UIElement* loadImageButton = new BrowseButton(parentWindow, 10, 10, 250, 40, 1, L"Load Image");
     elements.push_back(loadImageButton);
-    UIElement* filePathField = new TextField(parentWindow, 360, 80, 620, 40, 2, L"File path");
+    UIElement* filePathField = new TextField(parentWindow, 360, 10, 620, 40, 2, L"File path");
     elements.push_back(filePathField);
-    UIElement* textField = new TextField(parentWindow, 70, 760, 1260, 280, 3, L"");
+    UIElement* textField = new TextField(parentWindow, 10, 760, 1260, 280, 3, L"");
     elements.push_back(textField);
-    UIElement* previewField = new ImageField(parentWindow, 70, 140, 910, 600, 4, L"");
+    UIElement* previewField = new ImageField(parentWindow, 10, 60, 910, 600, 4, L"");
     elements.push_back(previewField);
-    UIElement* filtersField = new ImageField(parentWindow, 1000, 140, 330, 600, 5, L"");
+    UIElement* filtersField = new ImageField(parentWindow, 930, 60, 330, 600, 5, L"");
     elements.push_back(filtersField);
-    UIElement* propertiesField = new ImageField(parentWindow, 1350, 140, 520, 780, 6, L"");
+    UIElement* propertiesField = new ImageField(parentWindow, 1270, 60, 520, 780, 6, L"");
     elements.push_back(propertiesField);
     UIElement* encryptButton = new ActionButton(parentWindow, 1630, 940, 250, 40, 7, L"Encrypt");
     elements.push_back(encryptButton);
