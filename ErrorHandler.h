@@ -24,10 +24,12 @@ public:
 	{
 		FILE_NOT_FOUND = 0,
 		FILE_FORMAT_INCORRECT,
+
+		ERROR_TEST,
 		ERROR_COUNT
 	};
 
-	void Error(ErrorType& errorType);
+	void Error(ErrorType errorType);
 
 	bool IsRetryClicked() const { return m_stateClick == IDRETRY; };
 	bool IsCancelClicked() const { return m_stateClick == IDCANCEL; };

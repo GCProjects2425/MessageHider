@@ -5,6 +5,7 @@
 #include "MessageHider.h"
 #include "ImageHandler.h"
 #include "AppHandler.h"
+#include "ErrorHandler.h"
 
 #define MAX_LOADSTRING 100
 
@@ -124,6 +125,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
       return FALSE;
    }
 
+   ErrorHandler* errorHandler = new ErrorHandler(&hWnd);
+
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
 
@@ -193,6 +196,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 break;
             case IDM_SAVE_FILE:
                 imageHandler->Write();
+                break;
+            case IDM_ERROR_TEST:
+                ErrorHandler::GetInstance()->Error(ErrorHandler::ErrorType::ERROR_TEST);
                 break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
