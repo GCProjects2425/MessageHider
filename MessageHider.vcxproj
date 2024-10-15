@@ -130,6 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AppHandler.h" />
+    <ClInclude Include="ErrorHandler.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ImageHandler.h" />
     <ClInclude Include="MessageHider.h" />
@@ -138,6 +139,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppHandler.cpp" />
+    <ClCompile Include="ErrorHandler.cpp" />
     <ClCompile Include="ImageHandler.cpp" />
     <ClCompile Include="MessageHider.cpp" />
   </ItemGroup>
