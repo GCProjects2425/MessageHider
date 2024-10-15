@@ -1,10 +1,10 @@
 #include "ImageHandler.h"
 
 using namespace std;
-
+#include"Steganography.h"
 void ImageHandler::DestroyImage()
 {
-	delete m_Image;  // Supprimer l'image précédente si elle existe
+	delete m_Image;  // Supprimer l'image prï¿½cï¿½dente si elle existe
 }
 
 bool ImageHandler::Load(const wchar_t* filePath){
@@ -27,7 +27,7 @@ void ImageHandler::Write()
 	if (isValidImage())
 	{
 		Bitmap* bitmap = ToBitmap();
-		WriteTextInBitmap(bitmap, "salut ceci est un texte");
+		WriteTextInBitmap(bitmap, "Salut ceci est un text");
 
 		CLSID pngClsid;
 		GetEncoderClsid(L"image/png", &pngClsid);
@@ -52,7 +52,7 @@ void ImageHandler::Save(const wchar_t* filePath)
 		}
 		else
 		{
-			GetEncoderClsid(L"image/png", &imageClsid);   // Par défaut : encodeur PNG
+			GetEncoderClsid(L"image/png", &imageClsid);   // Par dï¿½faut : encodeur PNG
 		}
 		bitmap->Save(filePath, &imageClsid, NULL);
 	}
@@ -93,92 +93,13 @@ Bitmap* ImageHandler::ToBitmap()
 
 void ImageHandler::WriteTextInBitmap(Bitmap* bitmap, const std::string& text)
 {
-	Rect rect(0, 0, bitmap->GetWidth(), bitmap->GetHeight());
-	BitmapData bitmapData;
-
-	bitmap->LockBits(&rect, ImageLockModeWrite, PixelFormat32bppARGB, &bitmapData);
-
-	UINT* pixels = (UINT*)bitmapData.Scan0;
-	int width = bitmap->GetWidth();
-	int height = bitmap->GetHeight();
-	int pixelCount = width * height;
-
-	int charIndex = 0;
-	int bitIndex = 0;
-	char currentChar = text[charIndex];
-
-	for (int i = 0; i < pixelCount && charIndex < text.size(); ++i)
-	{
-		UINT* pixel = pixels + i;
-
-		for (int colorIndex = 0; colorIndex < 3; ++colorIndex)
-		{
-			BYTE* colorComponent = ((BYTE*)pixel) + colorIndex;
-
-			*colorComponent &= 0xFC; // supprimer les 2 derniers bits
-			*colorComponent |= ((currentChar >> (bitIndex * 2)) & 0x03); // remplacer les 2 derniers bits par les bits du char
-
-			bitIndex++;
-
-			if (bitIndex == 4)
-			{
-				bitIndex = 0;
-				charIndex++;
-				if (charIndex < text.size())
-				{
-					currentChar = text[charIndex]; // on passe au char suivant
-				}
-				else
-				{
-					currentChar = '\0'; // si on est a la fin du texte
-				}
-			}
-		}
-	}
-
-	bitmap->UnlockBits(&bitmapData);
+	Steganography::HideMessage(bitmap, text);
 }
 
 std::string ImageHandler::ReadTextInBitmap(Bitmap* bitmap)
 {
-	Rect rect(0, 0, bitmap->GetWidth(), bitmap->GetHeight());
-	BitmapData bitmapData;
-
-	bitmap->LockBits(&rect, ImageLockModeWrite, PixelFormat32bppARGB, &bitmapData);
-
-	UINT* pixels = (UINT*)bitmapData.Scan0;
-	int width = bitmap->GetWidth();
-	int height = bitmap->GetHeight();
-	int pixelCount = width * height;
-
-	std::string decodedText;
-	char currentChar = 0;
-	int bitIndex = 0;
-
-	for (int i = 0; 0 < pixelCount; ++i)
-	{
-		UINT* pixel = pixels + i;
-
-		for (int colorIndex = 0; colorIndex < 3; ++colorIndex)
-		{
-			BYTE* colorComponent = ((BYTE*)pixel) + colorIndex;
-
-			currentChar |= (*colorComponent & 0x03) << (bitIndex * 2); // Lire les 2 derniers bits
-
-			bitIndex++;
-			if (bitIndex == 4)
-			{
-				if (currentChar == '\0')  // Si c'est la fin du texte
-					break;
-				decodedText += currentChar;
-				currentChar = 0;
-				bitIndex = 0;
-			}
-		}
-	}
-
-	bitmap->UnlockBits(&bitmapData);
-	return decodedText;
+	
+	return Steganography::ExtractMessage(bitmap);
 }
 
 int ImageHandler::GetEncoderClsid(const WCHAR* format, CLSID* pClsid)

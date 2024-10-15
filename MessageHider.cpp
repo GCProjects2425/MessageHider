@@ -224,6 +224,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             case IDM_ERROR_TEST:
                 ErrorHandler::GetInstance()->Error(ErrorHandler::ErrorType::ERROR_TEST);
                 break;
+            case 2:
+                imageHandler->Write();
+                break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
@@ -236,7 +239,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             if (imageHandler->isValidImage())
             {
-                imageHandler->Draw(hdc, 10, 50);
+                imageHandler->Draw(hdc, 10, 250);
                 std::string text = imageHandler->Read();
                 std::wstring wideText = ConvertToWideString(text);
                 TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());
