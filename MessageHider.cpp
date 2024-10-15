@@ -118,7 +118,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Stocke le handle d'instance dans la variable globale
 
-   float scale = 0.7;
+   float scale = 0.75;
 
    int screenWidth = GetSystemMetrics(SM_CXSCREEN) * scale;
    int screenHeight = GetSystemMetrics(SM_CYSCREEN) * scale;
