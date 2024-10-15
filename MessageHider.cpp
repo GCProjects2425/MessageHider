@@ -2,13 +2,9 @@
 //
 
 #include "framework.h"
-#include "Windows.h"
-#include "commdlg.h"
 #include "MessageHider.h"
-#include <objidl.h>
-#include <gdiplus.h>
-using namespace Gdiplus;
-#pragma comment (lib,"Gdiplus.lib")
+#include "ImageHandler.h"
+#include "AppHandler.h"
 
 #define MAX_LOADSTRING 100
 
@@ -134,6 +130,14 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
+std::wstring ConvertToWideString(const std::string& str)
+{
+    int size_needed = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), NULL, 0);
+    std::wstring wstr(size_needed, 0);
+    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), &wstr[0], size_needed);
+    return wstr;
+}
+
 //
 //  FONCTION : WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -147,38 +151,35 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     static HWND button;
-    static Gdiplus::Image* image = NULL;
+    static HWND testButton;
+    static ImageHandler* imageHandler = new ImageHandler();
+    //static Image* image = NULL;
 
     switch (message)
     {
     case WM_CREATE:
         button = CreateWindow(L"BUTTON", L"Importer Image", WS_VISIBLE | WS_CHILD,
-            10, 10, 150, 30, hWnd, (HMENU)1, NULL, NULL);
+            10, 10, 150, 30, hWnd, (HMENU)IDM_OPEN_FILE, NULL, NULL);
+
+        testButton = CreateWindow(L"BUTTON", L"C'est un test", WS_VISIBLE | WS_CHILD,
+            10, 50, 150, 30, hWnd, (HMENU)2, NULL, NULL);
         break;
+    case WM_KEYDOWN:
+        if (GetKeyState(VK_CONTROL) & 0x8000)
+        {
+            switch (wParam)
+            {
+            case 'S':  // Ctrl + S
+                MessageBox(hWnd, L"Sauvegarder", L"Raccourci Ctrl+S", MB_OK);
+                break;
+            case 'O':  // Ctrl + O
+                AppHandler::OpenImage(hWnd, *imageHandler);
+                break;
+            }
+        }
     case WM_COMMAND:
         {
             int wmId = LOWORD(wParam);
-            if (LOWORD(wParam) == 1)  // Si le bouton est cliqué
-            {
-                OPENFILENAME ofn;
-                wchar_t file_name[100] = { 0 };
-                ZeroMemory(&ofn, sizeof(OPENFILENAME));
-                ofn.lStructSize = sizeof(OPENFILENAME);
-                ofn.hwndOwner = hWnd;
-                ofn.lpstrFile = file_name;
-                ofn.nMaxFile = 100;
-                ofn.lpstrFilter = L"Images\0*.bmp;*.jpg;*.png;*.gif\0";
-                ofn.nFilterIndex = 1;
-                ofn.lpstrTitle = L"Sélectionnez une image";
-                ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
-
-                if (GetOpenFileName(&ofn))
-                {
-                    delete image;  // Supprimer l'image précédente si elle existe
-                    image = new Gdiplus::Image(file_name);
-                    InvalidateRect(hWnd, NULL, TRUE);  // Redessiner la fenêtre
-                }
-            }
             switch (wmId)
             {
             case IDM_ABOUT:
@@ -186,6 +187,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 break;
             case IDM_EXIT:
                 DestroyWindow(hWnd);
+                break;
+            case IDM_OPEN_FILE:
+                AppHandler::OpenImage(hWnd, *imageHandler);
+                break;
+            case IDM_SAVE_FILE:
+                imageHandler->Write();
                 break;
             default:
                 return DefWindowProc(hWnd, message, wParam, lParam);
@@ -196,10 +203,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hWnd, &ps);
-            if (image)
+
+            if (imageHandler->isValidImage())
             {
-                Graphics graphics(hdc);
-                graphics.DrawImage(image, 10, 50);
+                imageHandler->Draw(hdc, 10, 50);
+                // Graphics graphics(hdc);
+                // graphics.DrawImage(image, 10, 50);
+                /*std::string text = imageHandler->Read();
+                std::wstring wideText = ConvertToWideString(text);
+                TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());*/
             }
 
             EndPaint(hWnd, &ps);
