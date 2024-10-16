@@ -132,6 +132,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    }
 
    ErrorHandler* errorHandler = new ErrorHandler(&hWnd);
+   SetUnhandledExceptionFilter(errorHandler->UnhandledExceptionHandler);
 
    AppHandler::SetHWND(hWnd);
 
@@ -229,7 +230,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
             if (imageHandler->isValidImage())
             {
-                imageHandler->Draw(hdc, 10, 250);
+                imageHandler->Draw(hdc, 20, 50);
                 /*std::string text = imageHandler->Read();
                 std::wstring wideText = ConvertToWideString(text);
                 TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());*/

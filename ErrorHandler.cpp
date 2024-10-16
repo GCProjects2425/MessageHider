@@ -1,4 +1,10 @@
 #include "ErrorHandler.h"
+#include <iostream>
+#include <exception>
+#include <fstream>
+#include <cstdlib>
+#include <format>
+#include <chrono>
 
 const char* const ErrorHandler::m_ErrorList[ERROR_COUNT] = { 
 	"Le fichier est introuvable",
@@ -14,6 +20,36 @@ void ErrorHandler::Error(ErrorType errorType)
 	m_currentError = errorType;
 
 	TriggerError();
+}
+
+LONG ErrorHandler::UnhandledExceptionHandlerInstance(EXCEPTION_POINTERS* exceptionInfo) {
+    LogError("Critical error: unhandled error has triggered.");
+
+    // Vous pouvez également afficher un message d'erreur ou un dialogue ici
+    MessageBox(NULL, L"Erreur critique: Le programme a rencontré un problème et va se fermer.", L"Erreur", MB_OK);
+
+    // Terminer le programme
+    return EXCEPTION_EXECUTE_HANDLER;
+}
+
+LONG WINAPI ErrorHandler::UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo)
+{
+    // Appeler la méthode d'instance à partir de la méthode statique
+    if (m_Instance) {
+        return m_Instance->UnhandledExceptionHandlerInstance(exceptionInfo);
+    }
+    return EXCEPTION_CONTINUE_SEARCH;
+}
+
+void ErrorHandler::LogError(const std::string& errorMessage)
+{
+    std::ofstream logFile("log.txt", std::ios_base::app);
+    auto now = std::chrono::system_clock::now();
+    std::string formatted_time = std::format("{0:%F_%T}", now);
+    if (logFile.is_open()) {
+        logFile << "[ERROR] " << formatted_time << " : " << errorMessage << std::endl;
+        logFile.close();
+    }
 }
 
 void ErrorHandler::TriggerError()
@@ -40,5 +76,7 @@ void ErrorHandler::TriggerError()
         MessageBox(*m_parentHwnd, L"Vous avez choisi Non", L"Résultat", MB_OK);
     }*/
 }
+
+
 
 ErrorHandler* ErrorHandler::m_Instance = nullptr;

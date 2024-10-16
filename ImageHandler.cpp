@@ -15,6 +15,19 @@ bool ImageHandler::Load(const wchar_t* filePath){
     DestroyImage();
     m_Image = new Image(filePath);
 	m_Bitmap = ToBitmap();
+
+	HWND hStatic = GetDlgItem(AppHandler::GetHWND(), 55);
+
+	// Récupérer les informations de l'image
+	int width = m_Image->GetWidth();
+	int height = m_Image->GetHeight();
+
+	// Convertir les informations en une chaîne
+	std::wstring info;
+	info += L"Resolution : " + std::to_wstring(width) + L"x" + std::to_wstring(height) + L" | ";
+
+	SetWindowText(hStatic, info.c_str());
+
     return isValidImage();
 }
 
@@ -150,7 +163,6 @@ int ImageHandler::GetEncoderClsid(const WCHAR* format, CLSID* pClsid)
 
 	Gdiplus::GetImageEncodersSize(&num, &size);
 	if (size == 0) return -1;
-
 	pImageCodecInfo = (Gdiplus::ImageCodecInfo*)(malloc(size));
 	if (pImageCodecInfo == NULL) return -1;
 

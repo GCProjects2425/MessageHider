@@ -16,6 +16,7 @@
 #include <string>
 
 #include <commdlg.h>
+#include <functional>
 
 #include "Resource.h"
 

@@ -36,6 +36,14 @@ public:
 	bool IsRetryClicked() const { return m_stateClick == IDRETRY; };
 	bool IsCancelClicked() const { return m_stateClick == IDCANCEL; };
 
+	void TerminateHandler()
+	{
+		LogError("Unhandled error captured!");
+		std::abort();
+	}
+	static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo);
+	LONG UnhandledExceptionHandlerInstance(EXCEPTION_POINTERS* exceptionInfo);
+
 private:
 	static ErrorHandler* m_Instance;
 	static const char* const m_ErrorList[];
@@ -46,6 +54,8 @@ private:
 	ErrorType m_lastError;
 
 	int m_stateClick;
+
+	void LogError(const std::string& errorMessage);
 
 	static void SetInstance(ErrorHandler* errorHandler) { m_Instance = errorHandler; }
 

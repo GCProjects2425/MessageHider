@@ -9,7 +9,7 @@ void Interface::CreateInterface()
 {
     UIElement* loadImageButton = new BrowseButton(parentWindow, 20, 20, 300, 40, IDM_OPEN_FILE, L"Load Image");
     elements.push_back(loadImageButton);
-    UIElement* dataField = new Field(parentWindow, 360, 20, 620, 40, 2, L"Image Data");
+    UIElement* dataField = new Field(parentWindow, 340, 20, 1540, 40, 55, L"Image Data");
     elements.push_back(dataField);
     UIElement* textField = new TextField(parentWindow, 20, 800, 1340, 200, 69, L"");
     elements.push_back(textField);
