@@ -8,7 +8,24 @@
 #include "ErrorHandler.h"
 #include "Interface.h"
 
+#include <dwmapi.h>
+#pragma comment(lib,"Dwmapi.lib")
+
 #define MAX_LOADSTRING 100
+
+void EnableDarkModeForTitleBar(HWND hwnd)
+{
+    BOOL darkmode = TRUE;
+    DwmSetWindowAttribute(hwnd, 20, &darkmode, sizeof(darkmode));
+}
+
+void ApplyDarkTheme(HWND hwnd)
+{
+    HBRUSH darkBrush = CreateSolidBrush(RGB(32, 32, 32));
+    SetClassLongPtr(hwnd, GCLP_HBRBACKGROUND, (LONG_PTR)darkBrush);
+
+    InvalidateRect(hwnd, NULL, TRUE);
+}
 
 // Variables globales :
 HINSTANCE hInst;                                // instance actuelle
@@ -134,6 +151,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    ErrorHandler* errorHandler = new ErrorHandler(&hWnd);
 
    AppHandler::SetHWND(hWnd);
+
+   EnableDarkModeForTitleBar(hWnd);
+   ApplyDarkTheme(hWnd);
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
