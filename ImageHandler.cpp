@@ -42,27 +42,55 @@ void ImageHandler::Write()
 
 void ImageHandler::Save(const wchar_t* filePath)
 {
+	// Vérifie que l'image est valide avant de continuer
 	if (isValidImage())
 	{
+		// Conversion de l'image en Bitmap GDI+
 		Bitmap* bitmap = ToBitmap();
-		CLSID imageClsid;
 
+		if (bitmap == nullptr)
+		{
+			// Gestion d'erreur : échec de la conversion en Bitmap
+			return;
+		}
+
+		CLSID imageClsid;
 		wstring fileExtension = filePath;
+
+		// Détecte l'extension du fichier pour choisir l'encodeur approprié
 		if (fileExtension.find(L".jpg") != wstring::npos || fileExtension.find(L".jpeg") != wstring::npos)
 		{
-			GetEncoderClsid(L"image/jpeg", &imageClsid);  // Encodeur JPEG
+			if (GetEncoderClsid(L"image/jpeg", &imageClsid) != -1) 
+			{
+				bitmap->Save(filePath, &imageClsid, NULL);
+			}
 		}
 		else if (fileExtension.find(L".bmp") != wstring::npos)
 		{
-			GetEncoderClsid(L"image/bmp", &imageClsid);   // Encodeur BMP
+			if (GetEncoderClsid(L"image/bmp", &imageClsid) != -1) 
+			{
+				bitmap->Save(filePath, &imageClsid, NULL);
+			}
+		}
+		else if (fileExtension.find(L".gif") != wstring::npos)
+		{
+			if (GetEncoderClsid(L"image/gif", &imageClsid) != -1)  
+			{
+				bitmap->Save(filePath, &imageClsid, NULL);
+			}
 		}
 		else
 		{
-			GetEncoderClsid(L"image/png", &imageClsid);   // Par d�faut : encodeur PNG
+			if (GetEncoderClsid(L"image/png", &imageClsid) != -1) 
+			{
+				bitmap->Save(filePath, &imageClsid, NULL);
+			}
 		}
-		bitmap->Save(filePath, &imageClsid, NULL);
+
+		DestroyImage();
 	}
 }
+
 
 
 
