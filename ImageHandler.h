@@ -6,6 +6,7 @@ class ImageHandler
 public:
 	ImageHandler()
 		: m_Image(nullptr)
+		, m_Bitmap(nullptr)
 	{
 		SetInstance(this);
 	};
@@ -32,6 +33,7 @@ public:
 
 private:
 	Image* m_Image;
+	Bitmap* m_Bitmap;
 
 	static void SetInstance(ImageHandler* imageHandler) { m_Instance = imageHandler; }
 
@@ -42,5 +44,6 @@ private:
 	std::string ReadTextInBitmap(Bitmap* bitmap);
 	int GetEncoderClsid(const WCHAR* format, CLSID* pClsid);
 	std::string WCharToString(const wchar_t* wstr);
+	std::wstring ConvertToWideString(const std::string& str);
 };
 

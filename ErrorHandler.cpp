@@ -3,8 +3,9 @@
 const char* const ErrorHandler::m_ErrorList[ERROR_COUNT] = { 
 	"Le fichier est introuvable",
 	"Le format de fichier est incorrect",
+    "Aucune image n'est chargée",
+    "Le texte est trop long",
     "Ceci est un test d'erreur",
-    "Aucune image n'est chargée"
 };
 
 void ErrorHandler::Error(ErrorType errorType)
@@ -25,7 +26,7 @@ void ErrorHandler::TriggerError()
         NULL,
         errorText,
         "Une erreur est survenue",
-            MB_ICONERROR | MB_RETRYCANCEL | MB_DEFBUTTON2
+        MB_ICONERROR | MB_RETRYCANCEL | MB_DEFBUTTON2
     );
 
     /*if (msgBox == IDYES)

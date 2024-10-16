@@ -1,17 +1,20 @@
 #include <cstdlib>
 #include "ImageHandler.h"
 #include "AppHandler.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 #include"Steganography.h"
 void ImageHandler::DestroyImage()
 {
 	delete m_Image;  // Supprimer l'image pr�c�dente si elle existe
+	delete m_Bitmap;
 }
 
 bool ImageHandler::Load(const wchar_t* filePath){
     DestroyImage();
     m_Image = new Image(filePath);
+	m_Bitmap = ToBitmap();
     return isValidImage();
 }
 
@@ -28,12 +31,21 @@ void ImageHandler::Write()
 {
 	if (isValidImage())
 	{
+		HWND hTextField = GetDlgItem(AppHandler::GetHWND(), 69);
 		int imageLength = m_Image->GetHeight() * m_Image->GetWidth();
+		int textLength = GetWindowTextLength(hTextField) + 1;
+		if (textLength > imageLength)
+		{
+			ErrorHandler::GetInstance()->Error(ErrorHandler::TEXT_IS_TOO_LONG);
+			return;
+		}
 		wchar_t* buffer = new wchar_t[imageLength];
-		GetDlgItemText(AppHandler::GetHWND(), 69, buffer, imageLength);
+		GetWindowText(hTextField, buffer, textLength);
+		//GetDlgItemText(AppHandler::GetHWND(), 69, buffer, imageLength);
 
-		Bitmap* bitmap = ToBitmap();
-		WriteTextInBitmap(bitmap, WCharToString(buffer));
+		WriteTextInBitmap(m_Bitmap, WCharToString(buffer));
+
+		SetWindowText(hTextField, L"");
 
 		/*CLSID pngClsid;
 		GetEncoderClsid(L"image/png", &pngClsid);*/
@@ -46,9 +58,7 @@ void ImageHandler::Save(const wchar_t* filePath)
 	if (isValidImage())
 	{
 		// Conversion de l'image en Bitmap GDI+
-		Bitmap* bitmap = ToBitmap();
-
-		if (bitmap == nullptr)
+		if (m_Bitmap == nullptr)
 		{
 			// Gestion d'erreur : échec de la conversion en Bitmap
 			return;
@@ -62,44 +72,42 @@ void ImageHandler::Save(const wchar_t* filePath)
 		{
 			if (GetEncoderClsid(L"image/jpeg", &imageClsid) != -1) 
 			{
-				bitmap->Save(filePath, &imageClsid, NULL);
+				m_Bitmap->Save(filePath, &imageClsid, NULL);
 			}
 		}
 		else if (fileExtension.find(L".bmp") != wstring::npos)
 		{
 			if (GetEncoderClsid(L"image/bmp", &imageClsid) != -1) 
 			{
-				bitmap->Save(filePath, &imageClsid, NULL);
+				m_Bitmap->Save(filePath, &imageClsid, NULL);
 			}
 		}
 		else if (fileExtension.find(L".gif") != wstring::npos)
 		{
 			if (GetEncoderClsid(L"image/gif", &imageClsid) != -1)  
 			{
-				bitmap->Save(filePath, &imageClsid, NULL);
+				m_Bitmap->Save(filePath, &imageClsid, NULL);
 			}
 		}
 		else
 		{
 			if (GetEncoderClsid(L"image/png", &imageClsid) != -1) 
 			{
-				bitmap->Save(filePath, &imageClsid, NULL);
+				m_Bitmap->Save(filePath, &imageClsid, NULL);
 			}
 		}
 	}
 }
-
-
-
 
 std::string ImageHandler::Read()
 {
 	std::string textEncoded = "";
 	if (isValidImage())
 	{
-		Bitmap* bitmap = ToBitmap();
-		//textEncoded = ReadTextInBitmap(bitmap);
-		
+		textEncoded = ReadTextInBitmap(m_Bitmap);
+		HWND hTextField = GetDlgItem(AppHandler::GetHWND(), 69);
+		SetWindowText(hTextField, ConvertToWideString(textEncoded).c_str());
+		//MessageBoxA(AppHandler::GetHWND(), textEncoded.c_str(), "Test", 0);
 	}
 
 	return textEncoded;
@@ -130,7 +138,6 @@ void ImageHandler::WriteTextInBitmap(Bitmap* bitmap, const std::string& text)
 
 std::string ImageHandler::ReadTextInBitmap(Bitmap* bitmap)
 {
-	
 	return Steganography::ExtractMessage(bitmap);
 }
 
@@ -167,6 +174,14 @@ std::string ImageHandler::WCharToString(const wchar_t* wstr) {
 	std::wstring ws(wstr);
 	std::string str(ws.begin(), ws.end());
 	return str;
+}
+
+std::wstring ImageHandler::ConvertToWideString(const std::string& str)
+{
+	int size_needed = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), NULL, 0);
+	std::wstring wstr(size_needed, 0);
+	MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), &wstr[0], size_needed);
+	return wstr;
 }
 
 ImageHandler* ImageHandler::m_Instance = nullptr;

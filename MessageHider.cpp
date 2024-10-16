@@ -141,14 +141,6 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
-std::wstring ConvertToWideString(const std::string& str)
-{
-    int size_needed = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), NULL, 0);
-    std::wstring wstr(size_needed, 0);
-    MultiByteToWideChar(CP_UTF8, 0, str.c_str(), (int)str.size(), &wstr[0], size_needed);
-    return wstr;
-}
-
 //
 //  FONCTION : WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -219,6 +211,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             case IDM_HIDE_MESSAGE:
                 imageHandler->Write();
                 break;
+            case IDM_DECODE_MESSAGE:
+                imageHandler->Read();
+                break;
             case IDM_ERROR_TEST:
                 ErrorHandler::GetInstance()->Error(ErrorHandler::ErrorType::ERROR_TEST);
                 break;
@@ -235,9 +230,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             if (imageHandler->isValidImage())
             {
                 imageHandler->Draw(hdc, 10, 250);
-                std::string text = imageHandler->Read();
+                /*std::string text = imageHandler->Read();
                 std::wstring wideText = ConvertToWideString(text);
-                TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());
+                TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());*/
             }
 
             EndPaint(hWnd, &ps);

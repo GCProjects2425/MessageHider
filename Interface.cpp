@@ -19,9 +19,9 @@ void Interface::CreateInterface()
     elements.push_back(filtersField);
     UIElement* propertiesField = new Field(parentWindow, 1380, 80, 500, 800, 6, L"");
     elements.push_back(propertiesField);
-    UIElement* encryptButton = new ActionButton(parentWindow, 1640, 900, 240, 40, 7, L"Encrypt");
+    UIElement* encryptButton = new ActionButton(parentWindow, 1640, 900, 240, 40, IDM_HIDE_MESSAGE, L"Encrypt");
     elements.push_back(encryptButton);
-    UIElement* decryptButton = new ActionButton(parentWindow, 1380, 900, 240, 40, 8, L"Decrypt");
+    UIElement* decryptButton = new ActionButton(parentWindow, 1380, 900, 240, 40, IDM_DECODE_MESSAGE, L"Decrypt");
     elements.push_back(decryptButton);
     UIElement* exportButton = new BrowseButton(parentWindow, 1380, 960, 500, 40, IDM_SAVE_FILE, L"Export");
     elements.push_back(exportButton);
