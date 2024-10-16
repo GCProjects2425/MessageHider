@@ -86,8 +86,6 @@ void ImageHandler::Save(const wchar_t* filePath)
 				bitmap->Save(filePath, &imageClsid, NULL);
 			}
 		}
-
-		DestroyImage();
 	}
 }
 
