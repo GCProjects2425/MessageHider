@@ -23,7 +23,7 @@ void EnableDarkModeForTitleBar(HWND hwnd)
 
 void ApplyDarkTheme(HWND hwnd)
 {
-    HBRUSH darkBrush = CreateSolidBrush(RGB(32, 32, 32));
+    HBRUSH darkBrush = CreateSolidBrush(Interface::GetBackgroundColor());
     SetClassLongPtr(hwnd, GCLP_HBRBACKGROUND, (LONG_PTR)darkBrush);
 
     InvalidateRect(hwnd, NULL, TRUE);
@@ -186,15 +186,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_CREATE:
-        /*button = CreateWindow(L"BUTTON", L"Importer Image", WS_VISIBLE | WS_CHILD,
-            10, 10, 150, 30, hWnd, (HMENU)IDM_OPEN_FILE, NULL, NULL);
-
-        /*testButton = CreateWindow(L"BUTTON", L"C'est un test", WS_VISIBLE | WS_CHILD,
-            10, 50, 150, 30, hWnd, (HMENU)IDM_SAVE_FILE, NULL, NULL);*/
-
-        /*saveButton = CreateWindow(L"BUTTON", L"Sauvegarder", WS_VISIBLE | WS_CHILD,
-            10, 90, 150, 30, hWnd, (HMENU)IDM_SAVE_FILE, NULL, NULL);*/
-
+        
         uiInterface->CreateInterface();
         break;
     case WM_KEYDOWN:
@@ -203,7 +195,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             switch (wParam)
             {
             case 'S':  // Ctrl + S
-                MessageBox(hWnd, L"Sauvegarder", L"Raccourci Ctrl+S", MB_OK);
+                AppHandler::SaveImage();
                 break;
             case 'O':  // Ctrl + O
                 AppHandler::OpenImage();

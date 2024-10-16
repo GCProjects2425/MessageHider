@@ -7,7 +7,7 @@
 class Interface
 {
 public:
-    Interface(HWND parent) : parentWindow(parent) {}
+    Interface(HWND parent) : parentWindow(parent) { ChangeTheme(); }
 
     ~Interface();
 
@@ -22,9 +22,21 @@ public:
 
     static float scale;
 
+    static COLORREF GetElementColor() { return elementColor; }
+    static COLORREF GetBorderColor() { return borderColor; }
+    static COLORREF GetBackgroundColor() { return bckgdColor; }
+    static COLORREF GetTextColor() { return textColor; }
+
+    void ChangeTheme();
+
 
 private:
     HWND parentWindow;
+
+    static COLORREF elementColor;  // Couleur de fond
+    static COLORREF borderColor;  // Couleur de la bordure
+    static COLORREF bckgdColor;  // Couleur de la bordure
+    static COLORREF textColor; // Couleur du texte
 
 };
 

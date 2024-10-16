@@ -7,10 +7,10 @@
 #include <chrono>
 
 const char* const ErrorHandler::m_ErrorList[ERROR_COUNT] = { 
-	"Le fichier est introuvable",
-	"Le format de fichier est incorrect",
-    "Aucune image n'est chargée",
-    "Le texte est trop long",
+	"File is missing",
+	"Incorrect file format",
+    "No image loaded",
+    "Text too long",
     "Ceci est un test d'erreur",
 };
 
@@ -26,7 +26,7 @@ LONG ErrorHandler::UnhandledExceptionHandlerInstance(EXCEPTION_POINTERS* excepti
     LogError("Critical error: unhandled error has triggered.");
 
     // Vous pouvez également afficher un message d'erreur ou un dialogue ici
-    MessageBox(NULL, L"Erreur critique: Le programme a rencontré un problème et va se fermer.", L"Erreur", MB_OK);
+    MessageBox(NULL, L"Critical error: The program has encountered a problem and will close.", L"Error", MB_OK);
 
     // Terminer le programme
     return EXCEPTION_EXECUTE_HANDLER;
@@ -61,8 +61,8 @@ void ErrorHandler::TriggerError()
     int msgBox = MessageBoxA(
         NULL,
         errorText,
-        "Une erreur est survenue",
-        MB_ICONERROR | MB_RETRYCANCEL | MB_DEFBUTTON2
+        "Warning",
+        MB_ICONWARNING | MB_DEFBUTTON1 | MB_TASKMODAL
     );
 
     /*if (msgBox == IDYES)
