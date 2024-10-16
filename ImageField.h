@@ -13,7 +13,7 @@ public:
 
 
 protected:
-	void HandleCommand(UINT message) override;
+	void HandlePaint(UINT message) override;
 	void OnPaint();
 };
 

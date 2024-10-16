@@ -9,7 +9,7 @@ public:
 	~UIElement() {};
 
 	virtual void CreateElement();
-	virtual void HandleCommand(UINT message) {};
+	virtual void HandlePaint(UINT message) {};
 
 	int m_id;
 	HWND m_hElement;

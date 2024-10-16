@@ -170,8 +170,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     static Interface* uiInterface = new Interface(hWnd);
 
-    uiInterface->HandleCommands(message);
-
     switch (message)
     {
     case WM_CREATE:
@@ -200,9 +198,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
     case WM_COMMAND:
-
         {
-
             int wmId = LOWORD(wParam);
             switch (wmId)
             {
@@ -233,35 +229,8 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
-        int wmId = LOWORD(wParam);
 
-        if (imageHandler->isValidImage())
-        {
-            Interface* uiInterface = new Interface(hWnd);
-            ImageField* previewField = nullptr;
-
-            for (auto element : uiInterface->elements) {
-                if (element->m_id == IDM_IMAGE_FIELD) {  
-                    previewField = dynamic_cast<ImageField*>(element); 
-                    break;  
-                }
-            }
-
-            if (previewField) {
-                RECT rect;
-                GetClientRect(previewField->m_hElement, &rect);  // Obtenir les dimensions de previewField
-
-                int fieldWidth = rect.right - rect.left;
-                int fieldHeight = rect.bottom - rect.top;
-
-                // Dessiner l'image redimensionnée pour s'adapter à previewField
-                imageHandler->Draw(hdc, 0, 0, fieldWidth, fieldHeight);
-            }
-
-            std::string text = imageHandler->Read();
-            std::wstring wideText = ConvertToWideString(text);
-            TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());
-        }
+        uiInterface->HandlePaints(message);
 
         EndPaint(hWnd, &ps);
     }

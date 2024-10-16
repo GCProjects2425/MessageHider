@@ -33,10 +33,10 @@ void Interface::CreateInterface()
 }
 
 
-void Interface::HandleCommands(UINT message)
+void Interface::HandlePaints(UINT message)
 {
     for (auto element : elements)
-        element->HandleCommand(message);
+        element->HandlePaint(message);
 }
 
 
