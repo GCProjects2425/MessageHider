@@ -3,6 +3,7 @@
 #include "UIElement.h"
 #include <vector>
 
+
 class Interface
 {
 public:
@@ -12,6 +13,7 @@ public:
 
     void CreateInterface();
     void HandlePaints(UINT message);
+    void ApplyTheme(LPARAM lParam);
 
     std::vector<UIElement*> elements;
 

@@ -11,6 +11,7 @@ public:
 	virtual void CreateElement();
 	virtual void HandlePaint(UINT message) {};
 
+
 protected:
 	
 	HWND m_hElement;

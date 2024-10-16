@@ -34,18 +34,19 @@ void UIElement::CreateElement()
 		OUT_OUTLINE_PRECIS, CLIP_DEFAULT_PRECIS, CLEARTYPE_QUALITY,
 		VARIABLE_PITCH | FF_SWISS, TEXT("Segoe UI"));
 
-	m_hElement = CreateWindow(m_type, m_text, m_style | DS_SETFONT,
+	m_hElement = CreateWindow(m_type, m_text, m_style | DS_SETFONT | BS_OWNERDRAW | BS_FLAT,
 		(m_x * width) / Interface::refWidth,    // Position X
 		(m_y * height) / Interface::refHeight,  // Position Y
 		(m_width * width) / Interface::refWidth,  // Largeur
 		(m_height * height) / Interface::refHeight,  // Hauteur
 		m_parentWnd, (HMENU)m_id, (HINSTANCE)GetWindowLongPtr(m_parentWnd, GWLP_HINSTANCE), NULL);
 
-	
+			
 	// Apply Font
 	if (m_hElement) {
 		SendMessage(m_hElement, WM_SETFONT, (WPARAM)hFont1, TRUE);
 	}
 
 }
+
 

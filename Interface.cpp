@@ -2,6 +2,7 @@
 #include "ElementsHeaders.h"
 #include "framework.h"
 
+
 Interface::~Interface(){}
 
 
@@ -39,4 +40,64 @@ void Interface::HandlePaints(UINT message)
         element->HandlePaint(message);
 }
 
+//
+//#include <gdiplus.h>
+//#pragma comment (lib,"Gdiplus.lib")
+//using namespace Gdiplus;
+
+void Interface::ApplyTheme(LPARAM lParam)
+{
+    LPDRAWITEMSTRUCT pDIS = (LPDRAWITEMSTRUCT)lParam;
+
+    // Vérifier si c'est un de vos boutons à dessiner
+    if (true)
+    {
+        HDC hdc = pDIS->hDC;
+
+        // Définir les couleurs du bouton
+        COLORREF buttonColor = RGB(45, 45, 45);  // Couleur de fond
+        COLORREF borderColor = RGB(80, 80, 80);  // Couleur de la bordure
+        COLORREF bckgdColor = RGB(35, 35, 35);  // Couleur de la bordure
+        COLORREF textColor = RGB(255, 255, 255); // Couleur du texte
+
+        // Créer les pinceaux et stylos
+        HBRUSH hBrush = CreateSolidBrush(buttonColor);
+        HBRUSH hBgBrush = CreateSolidBrush(bckgdColor);
+        HPEN hPen = CreatePen(PS_SOLID, 2, borderColor);
+
+        // Sélectionner les nouveaux pinceaux et stylos
+        HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
+        HPEN oldPen = (HPEN)SelectObject(hdc, hPen);
+
+        // Remplir la zone avec le fond du bouton pour masquer toute couleur blanche résiduelle
+        FillRect(hdc, &pDIS->rcItem, hBgBrush);
+
+        // Dessiner le bouton avec des bords arrondis
+        RoundRect(hdc, pDIS->rcItem.left, pDIS->rcItem.top, pDIS->rcItem.right, pDIS->rcItem.bottom, 20, 20);
+
+
+        WCHAR buttonText[256];
+        GetWindowText(pDIS->hwndItem, buttonText, sizeof(buttonText));
+
+        // Dessiner le texte
+        SetTextColor(hdc, textColor);
+        SetBkMode(hdc, TRANSPARENT);  // Fond transparent pour le texte
+        DrawText(hdc, buttonText, -1, &pDIS->rcItem, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+
+        // Restaurer les anciens objets GDI
+        SelectObject(hdc, oldBrush);
+        SelectObject(hdc, oldPen);
+
+        // Nettoyer
+        DeleteObject(hBrush);
+        DeleteObject(hPen);
+
+
+
+        
+    }
+    
+
+}
+    
 
