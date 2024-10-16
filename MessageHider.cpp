@@ -7,6 +7,8 @@
 #include "AppHandler.h"
 #include "ErrorHandler.h"
 #include "Interface.h"
+#include "ElementsHeaders.h"
+#include "framework.h"
 
 #include <dwmapi.h>
 #pragma comment(lib,"Dwmapi.lib")
@@ -181,8 +183,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     static Interface* uiInterface = new Interface(hWnd);
 
-    uiInterface->HandleCommands(message);
-
     switch (message)
     {
     case WM_CREATE:
@@ -211,9 +211,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             }
         }
     case WM_COMMAND:
-
         {
-
             int wmId = LOWORD(wParam);
             switch (wmId)
             {
@@ -244,21 +242,16 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
     case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
+    {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
 
-            if (imageHandler->isValidImage())
-            {
-                imageHandler->Draw(hdc, 20, 50);
-                /*std::string text = imageHandler->Read();
-                std::wstring wideText = ConvertToWideString(text);
-                TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());*/
-            }
+        uiInterface->HandlePaints(message);
 
-            EndPaint(hWnd, &ps);
-        }
-        break;
+        EndPaint(hWnd, &ps);
+    }
+    break;
+
     case WM_DESTROY:
         PostQuitMessage(0);
         break;

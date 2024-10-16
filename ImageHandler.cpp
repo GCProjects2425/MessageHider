@@ -31,14 +31,13 @@ bool ImageHandler::Load(const wchar_t* filePath){
     return isValidImage();
 }
 
-void ImageHandler::Draw(HDC hdc, int x, int y)
-{
-	if(m_Image)
-	{
+void ImageHandler::Draw(HDC hdc, int x, int y, int width, int height) {
+	if (m_Image) {
 		Graphics graphics(hdc);
-		graphics.DrawImage(m_Image, x, y);
+		graphics.DrawImage(m_Image, x, y, width, height); 
 	}
 }
+
 
 void ImageHandler::Write()
 {

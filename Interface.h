@@ -11,7 +11,7 @@ public:
     ~Interface();
 
     void CreateInterface();
-    void HandleCommands(UINT message);
+    void HandlePaints(UINT message);
 
     std::vector<UIElement*> elements;
 

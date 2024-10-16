@@ -13,7 +13,7 @@ void Interface::CreateInterface()
     elements.push_back(dataField);
     UIElement* textField = new TextField(parentWindow, 20, 800, 1340, 200, 69, L"");
     elements.push_back(textField);
-    UIElement* previewField = new ImageField(parentWindow, 20, 80, 1000, 700, 4, L"");
+    UIElement* previewField = new ImageField(parentWindow, 20, 80, 1000, 700, IDM_IMAGE_FIELD, L"");
     elements.push_back(previewField);
     UIElement* filtersField = new Field(parentWindow, 1040, 80, 320, 700, 5, L"");
     elements.push_back(filtersField);
@@ -33,10 +33,10 @@ void Interface::CreateInterface()
 }
 
 
-void Interface::HandleCommands(UINT message)
+void Interface::HandlePaints(UINT message)
 {
     for (auto element : elements)
-        element->HandleCommand(message);
+        element->HandlePaint(message);
 }
 
 
