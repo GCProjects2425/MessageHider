@@ -7,6 +7,8 @@
 #include "AppHandler.h"
 #include "ErrorHandler.h"
 #include "Interface.h"
+#include "ElementsHeaders.h"
+#include "framework.h"
 
 #define MAX_LOADSTRING 100
 
@@ -228,21 +230,43 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
         break;
     case WM_PAINT:
-        {
-            PAINTSTRUCT ps;
-            HDC hdc = BeginPaint(hWnd, &ps);
+    {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
+        int wmId = LOWORD(wParam);
 
-            if (imageHandler->isValidImage())
-            {
-                imageHandler->Draw(hdc, 10, 250);
-                std::string text = imageHandler->Read();
-                std::wstring wideText = ConvertToWideString(text);
-                TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());
+        if (imageHandler->isValidImage())
+        {
+            Interface* uiInterface = new Interface(hWnd);
+            ImageField* previewField = nullptr;
+
+            for (auto element : uiInterface->elements) {
+                if (element->m_id == IDM_IMAGE_FIELD) {  
+                    previewField = dynamic_cast<ImageField*>(element); 
+                    break;  
+                }
             }
 
-            EndPaint(hWnd, &ps);
+            if (previewField) {
+                RECT rect;
+                GetClientRect(previewField->m_hElement, &rect);  // Obtenir les dimensions de previewField
+
+                int fieldWidth = rect.right - rect.left;
+                int fieldHeight = rect.bottom - rect.top;
+
+                // Dessiner l'image redimensionnée pour s'adapter à previewField
+                imageHandler->Draw(hdc, 0, 0, fieldWidth, fieldHeight);
+            }
+
+            std::string text = imageHandler->Read();
+            std::wstring wideText = ConvertToWideString(text);
+            TextOut(hdc, 10, 100, wideText.c_str(), wideText.length());
         }
-        break;
+
+        EndPaint(hWnd, &ps);
+    }
+    break;
+
     case WM_DESTROY:
         PostQuitMessage(0);
         break;

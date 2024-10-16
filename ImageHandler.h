@@ -19,7 +19,7 @@ public:
 	void DestroyImage();
 
 	bool Load(const wchar_t* filePath);
-	void Draw(HDC hdc, int x, int y);
+	void Draw(HDC hdc, int x, int y, int width, int height);
 
 	std::string Read();
 	void Write();
