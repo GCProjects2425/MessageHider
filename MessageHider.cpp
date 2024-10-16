@@ -182,7 +182,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             switch (wParam)
             {
             case 'S':  // Ctrl + S
-                MessageBox(hWnd, L"Sauvegarder", L"Raccourci Ctrl+S", MB_OK);
+                AppHandler::SaveImage();
                 break;
             case 'O':  // Ctrl + O
                 AppHandler::OpenImage();
