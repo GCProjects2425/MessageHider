@@ -165,7 +165,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     static HWND testButton;
     static HWND saveButton;
     static ImageHandler* imageHandler = new ImageHandler();
-    //static Image* image = NULL;
 
     static Interface* uiInterface = new Interface(hWnd);
 

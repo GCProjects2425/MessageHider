@@ -3,7 +3,8 @@
 const char* const ErrorHandler::m_ErrorList[ERROR_COUNT] = { 
 	"Le fichier est introuvable",
 	"Le format de fichier est incorrect",
-    "Ceci est un test d'erreur"
+    "Ceci est un test d'erreur",
+    "Aucune image n'est chargée"
 };
 
 void ErrorHandler::Error(ErrorType errorType)
