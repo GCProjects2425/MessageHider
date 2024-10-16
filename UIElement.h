@@ -11,17 +11,15 @@ public:
 	virtual void CreateElement();
 	virtual void HandlePaint(UINT message) {};
 
-	int m_id;
-	HWND m_hElement;
-
 protected:
 	
-
+	HWND m_hElement;
 	HWND m_parentWnd;
 	int m_x;
 	int m_y;
 	int m_width;
 	int m_height;
+	int m_id;
 	
 	LPCWSTR m_text;
 
