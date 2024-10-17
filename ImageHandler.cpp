@@ -198,6 +198,7 @@ void ImageHandler::ApplyFilter(Filter::Filters filter)
 void ImageHandler::Reset()
 {
 	m_Image = static_cast<Image*>(m_Bitmap);
+	m_BitmapFiltered = m_Bitmap->Clone(0, 0, m_Bitmap->GetWidth(), m_Bitmap->GetHeight(), m_Bitmap->GetPixelFormat());
 }
 
 Bitmap* ImageHandler::ToBitmap()
