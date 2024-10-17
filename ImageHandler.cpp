@@ -130,6 +130,12 @@ bool ImageHandler::isValidImage()
 	return (m_Image != nullptr && m_Image->GetLastStatus() == Status::Ok);
 }
 
+void ImageHandler::ApplyFilter(Filter& filter)
+{
+	filter.Apply(*m_Bitmap);
+	displayImage();
+}
+
 Bitmap* ImageHandler::ToBitmap()
 {
 	Bitmap* bitmap = dynamic_cast<Bitmap*>(m_Image);

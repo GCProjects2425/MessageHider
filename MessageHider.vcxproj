@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AppHandler.h" />
+    <ClInclude Include="BlackWhiteFilter.h" />
     <ClInclude Include="DropDownButton.h" />
     <ClInclude Include="ErrorHandler.h" />
     <ClInclude Include="ActionButton.h" />
@@ -156,6 +157,7 @@
     <ClInclude Include="ButtonsHeaders.h" />
     <ClInclude Include="ElementsHeaders.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="Filter.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ImageField.h" />
     <ClInclude Include="ImageHandler.h" />
@@ -169,6 +171,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppHandler.cpp" />
+    <ClCompile Include="BlackWhiteFilter.cpp" />
     <ClCompile Include="DropDownButton.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
     <ClCompile Include="ActionButton.cpp" />
@@ -177,6 +180,7 @@
     <ClCompile Include="ButtonsHeaders.cpp" />
     <ClCompile Include="ElementsHeaders.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="Filter.cpp" />
     <ClCompile Include="ImageField.cpp" />
     <ClCompile Include="ImageHandler.cpp" />
     <ClCompile Include="Interface.cpp" />

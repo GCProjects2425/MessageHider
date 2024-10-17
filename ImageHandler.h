@@ -1,5 +1,6 @@
 #pragma once
 #include "framework.h"
+#include "Filter.h"
 
 class ImageHandler
 {
@@ -30,6 +31,8 @@ public:
 	bool isValidImage();
 
 	static ImageHandler* GetInstance() { return m_Instance; };
+
+	void ApplyFilter(Filter& filter);
 
 private:
 	Image* m_Image;
