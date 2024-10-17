@@ -6,7 +6,7 @@
 class Filter
 {
 public:
-	virtual void Apply(Gdiplus::Bitmap& image) = 0;
+	virtual void Apply(Gdiplus::Bitmap* image) = 0;
 	virtual ~Filter() = default;
 };
 

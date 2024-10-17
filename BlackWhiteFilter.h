@@ -5,6 +5,6 @@
 class BlackWhiteFilter : public Filter
 {
 public :
-	void Apply(Bitmap& image) override;
+	void Apply(Bitmap* image) override;
 };
 
