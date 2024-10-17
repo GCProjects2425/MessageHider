@@ -119,7 +119,7 @@ void Interface::ChangeTheme(HWND hWnd, UINT message)
         elementColor = RGB(88, 0, 0);
         borderColor = RGB(66, 66, 66);
         bckgdColor = RGB(57, 0, 0);
-        textColor = RGB(0, 0, 0);   
+        textColor = RGB(255, 255, 255);
         break;
 
     case ID_VIEW_LIMEMODE:
