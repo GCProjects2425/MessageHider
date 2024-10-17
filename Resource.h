@@ -1,6 +1,6 @@
 //{{NO_DEPENDENCIES}}
 // fichier Include Microsoft Visual C++.
-// Utilisé par MessageHider.rc
+// Utilisï¿½ par MessageHider.rc
 //
 #define IDC_MYICON                      2
 #define IDD_MESSAGEHIDER_DIALOG         102
