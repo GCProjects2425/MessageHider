@@ -134,6 +134,7 @@ bool ImageHandler::isValidImage()
 void ImageHandler::ApplyFilter(Filter& filter) {
 	if (isValidImage()) {
 		filter.Apply(m_Bitmap);
+		m_Image = static_cast<Image*>(m_Bitmap);
 		//Draw(GetDC(AppHandler::GetHWND()), 0, 0, m_Bitmap->GetWidth(), m_Bitmap->GetHeight());
 	}
 }
