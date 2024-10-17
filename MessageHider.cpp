@@ -219,24 +219,44 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
         case IDM_EXIT:
             DestroyWindow(hWnd);
+            SetFocus(hWnd);
             break;
         case IDM_OPEN_FILE:
             AppHandler::OpenImage();
+            SetFocus(hWnd);
             break;
         case IDM_SAVE_FILE:
             AppHandler::SaveImage();
+            SetFocus(hWnd);
             break;
         case IDM_HIDE_MESSAGE:
             imageHandler->Write();
+            SetFocus(hWnd);
             break;
         case IDM_DECODE_MESSAGE:
             imageHandler->Read();
+            SetFocus(hWnd);
             break;
         case IDM_SHOW_LOGS:
             ErrorHandler::GetInstance()->OpenLogWindow((HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE));
             break;
-        case ID_EDIT_FILTER:
+        case ID_APPLY_BLACKWHITE_FILTER:
             imageHandler->ApplyFilter(Filter::BLACKWHITE_FILTER);
+            InvalidateRect(hWnd, NULL, TRUE);
+            SetFocus(hWnd);
+            break;
+        case ID_APPLY_INVERT_FILTER:
+            imageHandler->ApplyFilter(Filter::INVERT_FILTER);
+            InvalidateRect(hWnd, NULL, TRUE);
+            SetFocus(hWnd);
+            break;
+        case ID_APPLY_BLUR_FILTER:
+            imageHandler->ApplyFilter(Filter::BLUR_FILTER);
+            InvalidateRect(hWnd, NULL, TRUE);
+            SetFocus(hWnd);
+            break;
+        case ID_RESET_FILTER:
+            //imageHandler->Reset();
             InvalidateRect(hWnd, NULL, TRUE);
             SetFocus(hWnd);
             break;

@@ -19,5 +19,7 @@ public:
 
 private:
 	void BlackWhiteFilter(Bitmap* image);
+	void InvertFilter(Bitmap* image);
+	void BlurFilter(Bitmap* image);
 };
 

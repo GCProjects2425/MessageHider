@@ -6,6 +6,7 @@
 
 #include "targetver.h"
 #define WIN32_LEAN_AND_MEAN             // Exclure les en-têtes Windows rarement utilisés
+#define NOMINMAX
 // Fichiers d'en-tête Windows
 #include <Windows.h>
 // Fichiers d'en-tête C RunTime
@@ -17,6 +18,7 @@
 
 #include <commdlg.h>
 #include <functional>
+#include <algorithm>
 
 #include "Resource.h"
 

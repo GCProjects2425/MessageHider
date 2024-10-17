@@ -40,7 +40,7 @@ public:
 private:
 	Image* m_Image;
 	Bitmap* m_Bitmap;
-	Filter* m_Filter;
+	Bitmap* m_BitmapFiltered;
 
 	static void SetInstance(ImageHandler* imageHandler) { m_Instance = imageHandler; }
 

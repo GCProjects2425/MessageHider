@@ -1,4 +1,5 @@
 #include "Filter.h"
+#include "framework.h"
 
 void Filter::Apply(Bitmap* bitmap, Filters filter)
 {
@@ -8,8 +9,10 @@ void Filter::Apply(Bitmap* bitmap, Filters filter)
         BlackWhiteFilter(bitmap);
         break;
     case Filter::INVERT_FILTER:
+        InvertFilter(bitmap);
         break;
     case Filter::BLUR_FILTER:
+        BlurFilter(bitmap);
         break;
     case Filter::SATURE_FILTER:
         break;
@@ -53,4 +56,115 @@ void Filter::BlackWhiteFilter(Bitmap* image)
 
     // Déverrouiller les bits après modification
     image->UnlockBits(&bitmapData);
+}
+
+void Filter::InvertFilter(Bitmap* image)
+{
+    if (!image) return;
+
+    // Verrouiller les bits de l'image pour la lecture/écriture
+    BitmapData bitmapData;
+    Rect rect(0, 0, image->GetWidth(), image->GetHeight());
+
+    // Bloquer les bits du bitmap pour les manipuler directement
+    if (image->LockBits(&rect, ImageLockModeRead | ImageLockModeWrite, PixelFormat32bppARGB, &bitmapData) == Ok) {
+        // Pointer vers le début des données d'image
+        BYTE* pixels = static_cast<BYTE*>(bitmapData.Scan0);
+
+        // Parcourir chaque ligne (chaque "scanline")
+        for (UINT y = 0; y < image->GetHeight(); y++) {
+            // Parcourir chaque pixel de la ligne
+            BYTE* pixel = pixels + y * bitmapData.Stride; // Stride donne la largeur totale de la ligne, y compris le padding
+
+            for (UINT x = 0; x < image->GetWidth(); x++) {
+                // Inverser les bits de chaque composante de couleur (R, G, B)
+                pixel[0] = 255 - pixel[0]; // Composante bleue
+                pixel[1] = 255 - pixel[1]; // Composante verte
+                pixel[2] = 255 - pixel[2]; // Composante rouge
+                // pixel[3] : Composante alpha (si nécessaire, on peut l'ignorer ou la traiter différemment)
+
+                // Passer au pixel suivant (chaque pixel a 4 bytes en 32bpp)
+                pixel += 4;
+            }
+        }
+
+        // Débloquer les bits
+        image->UnlockBits(&bitmapData);
+    }
+}
+
+void Filter::BlurFilter(Bitmap* image)
+{
+    if (!image) return;
+
+    int width = image->GetWidth();
+    int height = image->GetHeight();
+    int radius = 100;
+
+    // Créer des buffers temporaires pour stocker les résultats intermédiaires
+    BitmapData bitmapData;
+    Rect rect(0, 0, width, height);
+
+    if (image->LockBits(&rect, ImageLockModeRead | ImageLockModeWrite, PixelFormat32bppARGB, &bitmapData) == Ok) {
+        BYTE* pixels = static_cast<BYTE*>(bitmapData.Scan0);
+        int stride = bitmapData.Stride;
+
+        // Première passe : Flou horizontal
+        std::vector<BYTE> tempBuffer(height * stride);
+        #pragma omp parallel for
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
+                int avgR = 0, avgG = 0, avgB = 0, avgA = 0;
+                int count = 0;
+
+                // Parcourir les pixels voisins horizontalement
+                for (int kx = -radius; kx <= radius; ++kx) {
+                    int neighborX = std::min(std::max(x + kx, 0), width - 1);
+
+                    BYTE* neighborPixel = pixels + (y * stride) + (neighborX * 4);
+                    avgB += neighborPixel[0]; // Bleu
+                    avgG += neighborPixel[1]; // Vert
+                    avgR += neighborPixel[2]; // Rouge
+                    avgA += neighborPixel[3]; // Alpha
+                    ++count;
+                }
+
+                // Calculer la moyenne et stocker dans le buffer temporaire
+                tempBuffer[(y * stride) + (x * 4) + 0] = avgB / count;
+                tempBuffer[(y * stride) + (x * 4) + 1] = avgG / count;
+                tempBuffer[(y * stride) + (x * 4) + 2] = avgR / count;
+                tempBuffer[(y * stride) + (x * 4) + 3] = avgA / count;
+            }
+        }
+
+        // Deuxième passe : Flou vertical
+        #pragma omp parallel for
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
+                int avgR = 0, avgG = 0, avgB = 0, avgA = 0;
+                int count = 0;
+
+                // Parcourir les pixels voisins verticalement
+                for (int ky = -radius; ky <= radius; ++ky) {
+                    int neighborY = std::min(std::max(y + ky, 0), height - 1);
+
+                    BYTE* neighborPixel = &tempBuffer[(neighborY * stride) + (x * 4)];
+                    avgB += neighborPixel[0];
+                    avgG += neighborPixel[1];
+                    avgR += neighborPixel[2];
+                    avgA += neighborPixel[3];
+                    ++count;
+                }
+
+                // Mettre à jour les pixels dans le bitmap
+                BYTE* currentPixel = pixels + (y * stride) + (x * 4);
+                currentPixel[0] = avgB / count;
+                currentPixel[1] = avgG / count;
+                currentPixel[2] = avgR / count;
+                currentPixel[3] = avgA / count;
+            }
+        }
+
+        image->UnlockBits(&bitmapData);
+    }
 }

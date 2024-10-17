@@ -19,12 +19,19 @@ void Interface::CreateInterface()
     elements.push_back(textField);
     UIElement* previewField = new ImageField(parentWindow, 20, 80, 1340, 700, IDM_IMAGE_FIELD, L"");
     elements.push_back(previewField);
-    /*UIElement* filtersField = new Field(parentWindow, 1040, 80, 320, 700, 5, L"");
-    elements.push_back(filtersField);*/
+
     UIElement* propertiesField = new Field(parentWindow, 1380, 200, 500, 680, 6, L"");
     elements.push_back(propertiesField);
-    UIElement* filterButton = new ActionButton(parentWindow, 1400, 600, 240, 40, ID_EDIT_FILTER, L"Filter");
-    elements.push_back(filterButton);
+    UIElement* blackWhiteFilterButton = new ActionButton(parentWindow, 1400, 220, 460, 40, ID_APPLY_BLACKWHITE_FILTER, L"Apply Grayscale filter");
+    elements.push_back(blackWhiteFilterButton);
+    UIElement* invertFilterButton = new ActionButton(parentWindow, 1400, 280, 460, 40, ID_APPLY_INVERT_FILTER, L"Apply Inverted filter");
+    elements.push_back(invertFilterButton);
+    UIElement* blurFilterButton = new ActionButton(parentWindow, 1400, 340, 460, 40, ID_APPLY_BLUR_FILTER, L"Apply Blured filter");
+    elements.push_back(blurFilterButton);
+
+    UIElement* resetFilterButton = new ActionButton(parentWindow, 1400, 820, 460, 40, ID_RESET_FILTER, L"Reset image");
+    elements.push_back(resetFilterButton);
+
     UIElement* encryptButton = new ActionButton(parentWindow, 1380, 900, 240, 40, IDM_HIDE_MESSAGE, L"Encrypt");
     elements.push_back(encryptButton);
     UIElement* decryptButton = new ActionButton(parentWindow, 1640, 900, 240, 40, IDM_DECODE_MESSAGE, L"Decrypt");
