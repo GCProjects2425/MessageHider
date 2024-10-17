@@ -10,6 +10,7 @@
 #include "ElementsHeaders.h"
 #include "framework.h"
 
+#include <shellapi.h>
 #include <dwmapi.h>
 #pragma comment(lib,"Dwmapi.lib")
 
@@ -186,7 +187,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     switch (message)
     {
     case WM_CREATE:
-        
         uiInterface->CreateInterface();
         break;
     case WM_KEYDOWN:
@@ -200,39 +200,48 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             case 'O':  // Ctrl + O
                 AppHandler::OpenImage();
                 break;
+            case 'E':  // Ctrl + E
+                imageHandler->Write();
+                break;
+            case 'D':  // Ctrl + D
+                imageHandler->Read();
+                break;
             }
         }
     case WM_COMMAND:
+    {
+        int wmId = LOWORD(wParam);
+        switch (wmId)
         {
-            int wmId = LOWORD(wParam);
-            switch (wmId)
-            {
-            case IDM_ABOUT:
-                DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
-                break;
-            case IDM_EXIT:
-                DestroyWindow(hWnd);
-                break;
-            case IDM_OPEN_FILE:
-                AppHandler::OpenImage();
-                break;
-            case IDM_SAVE_FILE:
-                AppHandler::SaveImage();
-                break;
-            case IDM_HIDE_MESSAGE:
-                imageHandler->Write();
-                break;
-            case IDM_DECODE_MESSAGE:
-                imageHandler->Read();
-                break;
-            case IDM_ERROR_TEST:
-                ErrorHandler::GetInstance()->Error(ErrorHandler::ErrorType::ERROR_TEST);
-                break;
-            default:
-                return DefWindowProc(hWnd, message, wParam, lParam);
-            }
+        case IDM_ABOUT:
+            DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+            break;
+        case IDM_EXIT:
+            DestroyWindow(hWnd);
+            break;
+        case IDM_OPEN_FILE:
+            AppHandler::OpenImage();
+            break;
+        case IDM_SAVE_FILE:
+            AppHandler::SaveImage();
+            break;
+        case IDM_HIDE_MESSAGE:
+            imageHandler->Write();
+            break;
+        case IDM_DECODE_MESSAGE:
+            imageHandler->Read();
+            break;
+        case IDM_SHOW_LOGS:
+            ErrorHandler::GetInstance()->OpenLogWindow((HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE));
+            break;
+        case IDM_ERROR_TEST:
+            ErrorHandler::GetInstance()->Error(ErrorHandler::ErrorType::ERROR_TEST);
+            break;
+        default:
+            return DefWindowProc(hWnd, message, wParam, lParam);
         }
         break;
+    }
     case WM_PAINT:
     {
         PAINTSTRUCT ps;
@@ -241,16 +250,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         uiInterface->HandlePaints(message);
 
         EndPaint(hWnd, &ps);
-    }
-    break;
 
+        break;
+    }
     case WM_DRAWITEM:
     {
         uiInterface->ApplyTheme(lParam);
         break;
     }
-
-
     case WM_DESTROY:
         PostQuitMessage(0);
         break;

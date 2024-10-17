@@ -26,7 +26,7 @@ void UIElement::CreateElement()
 	if (GetWindowRect(m_parentWnd, &rect))
 	{
 		width = rect.right - rect.left;
-		height = rect.bottom - rect.top;
+		height = rect.bottom - rect.top - 20;
 	}
 
 	//Font

@@ -27,6 +27,8 @@ public:
 	
 	void Save(const wchar_t* filePath);
 
+	const wchar_t* GetMimeType();
+
 	bool isValidImage();
 
 	static ImageHandler* GetInstance() { return m_Instance; };

@@ -24,17 +24,21 @@ bool ImageHandler::Load(const wchar_t* filePath){
 
 	// Convertir les informations en une chaîne
 	std::wstring info;
-	info += L"Resolution : " + std::to_wstring(width) + L"x" + std::to_wstring(height) + L" | ";
-
+	info += L"Resolution : " + std::to_wstring(width) + L"x" + std::to_wstring(height) + L" | MIME Type : " + GetMimeType();
 	SetWindowText(hStatic, info.c_str());
 
     return isValidImage();
 }
 
 void ImageHandler::Draw(HDC hdc, int x, int y, int width, int height) {
-	if (m_Image) {
+	if (isValidImage()) 
+	{
 		Graphics graphics(hdc);
 		graphics.DrawImage(m_Image, x, y, width, height); 
+	}
+	else
+	{
+		ErrorHandler::GetInstance()->Error(ErrorHandler::NO_IMAGE_LOADED);
 	}
 }
 
@@ -59,8 +63,11 @@ void ImageHandler::Write()
 
 		SetWindowText(hTextField, L"");
 
-		/*CLSID pngClsid;
-		GetEncoderClsid(L"image/png", &pngClsid);*/
+		MessageBoxA(AppHandler::GetHWND(), "The text has been correctly encrypted.", "Success!", 0);
+	}
+	else
+	{
+		ErrorHandler::GetInstance()->Error(ErrorHandler::NO_IMAGE_LOADED);
 	}
 }
 
@@ -79,35 +86,73 @@ void ImageHandler::Save(const wchar_t* filePath)
 		CLSID imageClsid;
 		wstring fileExtension = filePath;
 
-		// Détecte l'extension du fichier pour choisir l'encodeur approprié
-		if (fileExtension.find(L".jpg") != wstring::npos || fileExtension.find(L".jpeg") != wstring::npos)
+		try
 		{
-			if (GetEncoderClsid(L"image/jpeg", &imageClsid) != -1) 
+			// Détecte l'extension du fichier pour choisir l'encodeur approprié
+			if (fileExtension.find(L".jpg") != wstring::npos || fileExtension.find(L".jpeg") != wstring::npos)
 			{
-				m_Bitmap->Save(filePath, &imageClsid, NULL);
+				if (GetEncoderClsid(L"image/jpeg", &imageClsid) != -1) 
+				{
+					m_Bitmap->Save(filePath, &imageClsid, NULL);
+				}
 			}
+			else if (fileExtension.find(L".bmp") != wstring::npos)
+			{
+				if (GetEncoderClsid(L"image/bmp", &imageClsid) != -1) 
+				{
+					m_Bitmap->Save(filePath, &imageClsid, NULL);
+				}
+			}
+			else if (fileExtension.find(L".gif") != wstring::npos)
+			{
+				if (GetEncoderClsid(L"image/gif", &imageClsid) != -1)  
+				{
+					m_Bitmap->Save(filePath, &imageClsid, NULL);
+				}
+			}
+			else
+			{
+				if (GetEncoderClsid(L"image/png", &imageClsid) != -1) 
+				{
+					m_Bitmap->Save(filePath, &imageClsid, NULL);
+				}
+			}
+
+			MessageBoxA(AppHandler::GetHWND(), "The image has been correctly exported.", "Success!", 0);
 		}
-		else if (fileExtension.find(L".bmp") != wstring::npos)
+		catch (const std::exception&)
 		{
-			if (GetEncoderClsid(L"image/bmp", &imageClsid) != -1) 
-			{
-				m_Bitmap->Save(filePath, &imageClsid, NULL);
-			}
+			ErrorHandler::GetInstance()->Error(ErrorHandler::EXPORT_FAILED);
 		}
-		else if (fileExtension.find(L".gif") != wstring::npos)
-		{
-			if (GetEncoderClsid(L"image/gif", &imageClsid) != -1)  
-			{
-				m_Bitmap->Save(filePath, &imageClsid, NULL);
-			}
-		}
-		else
-		{
-			if (GetEncoderClsid(L"image/png", &imageClsid) != -1) 
-			{
-				m_Bitmap->Save(filePath, &imageClsid, NULL);
-			}
-		}
+	}
+	else
+	{
+		ErrorHandler::GetInstance()->Error(ErrorHandler::NO_IMAGE_LOADED);
+	}
+}
+
+const wchar_t* ImageHandler::GetMimeType()
+{
+	GUID format;
+	m_Image->GetRawFormat(&format);
+
+	if (format == Gdiplus::ImageFormatBMP) {
+		return L"image/bmp";
+	}
+	else if (format == Gdiplus::ImageFormatJPEG) {
+		return L"image/jpeg";
+	}
+	else if (format == Gdiplus::ImageFormatPNG) {
+		return L"image/png";
+	}
+	else if (format == Gdiplus::ImageFormatGIF) {
+		return L"image/gif";
+	}
+	else if (format == Gdiplus::ImageFormatTIFF) {
+		return L"image/tiff";
+	}
+	else {
+		return L"unknown";
 	}
 }
 
@@ -120,6 +165,10 @@ std::string ImageHandler::Read()
 		HWND hTextField = GetDlgItem(AppHandler::GetHWND(), 69);
 		SetWindowText(hTextField, ConvertToWideString(textEncoded).c_str());
 		//MessageBoxA(AppHandler::GetHWND(), textEncoded.c_str(), "Test", 0);
+	}
+	else
+	{
+		ErrorHandler::GetInstance()->Error(ErrorHandler::NO_IMAGE_LOADED);
 	}
 
 	return textEncoded;
