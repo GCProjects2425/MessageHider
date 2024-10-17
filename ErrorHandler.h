@@ -26,6 +26,7 @@ public:
 		FILE_FORMAT_INCORRECT,
 		NO_IMAGE_LOADED,
 		TEXT_IS_TOO_LONG,
+		EXPORT_FAILED,
 
 		ERROR_TEST,
 		ERROR_COUNT
@@ -36,6 +37,8 @@ public:
 	bool IsRetryClicked() const { return m_stateClick == IDRETRY; };
 	bool IsCancelClicked() const { return m_stateClick == IDCANCEL; };
 
+	static const std::wstring& GetLogPath();
+
 	void TerminateHandler()
 	{
 		LogError("Unhandled error captured!");
@@ -43,6 +46,8 @@ public:
 	}
 	static LONG WINAPI UnhandledExceptionHandler(EXCEPTION_POINTERS* exceptionInfo);
 	LONG UnhandledExceptionHandlerInstance(EXCEPTION_POINTERS* exceptionInfo);
+
+	void OpenLogWindow(HINSTANCE hInstance);
 
 private:
 	static ErrorHandler* m_Instance;
@@ -61,5 +66,8 @@ private:
 
 	void TriggerError();
 
+	static LRESULT CALLBACK LogWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
+	void LoadFileContentIntoTextField(HWND hEdit, const wchar_t* filename);
 };
 
