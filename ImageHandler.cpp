@@ -132,7 +132,7 @@ bool ImageHandler::isValidImage()
 }
 
 void ImageHandler::ApplyFilter(Filter& filter) {
-	if (m_Bitmap != nullptr) {
+	if (isValidImage()) {
 		filter.Apply(*m_Bitmap);
 		Draw(GetDC(AppHandler::GetHWND()), 0, 0, m_Bitmap->GetWidth(), m_Bitmap->GetHeight());
 	}

@@ -11,6 +11,7 @@
 #include "framework.h"
 
 #include <dwmapi.h>
+#include "BlackWhiteFilter.h"
 #pragma comment(lib,"Dwmapi.lib")
 
 #define MAX_LOADSTRING 100
@@ -204,6 +205,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
     case WM_COMMAND:
         {
+            BlackWhiteFilter bwFilter;
             int wmId = LOWORD(wParam);
             switch (wmId)
             {
@@ -224,6 +226,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 break;
             case IDM_DECODE_MESSAGE:
                 imageHandler->Read();
+                break;
+            case ID_EDIT_FILTER:
+                imageHandler->ApplyFilter(bwFilter);
                 break;
             case IDM_ERROR_TEST:
                 ErrorHandler::GetInstance()->Error(ErrorHandler::ErrorType::ERROR_TEST);
