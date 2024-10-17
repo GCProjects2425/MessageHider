@@ -255,6 +255,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             InvalidateRect(hWnd, NULL, TRUE);
             SetFocus(hWnd);
             break;
+        case ID_APPLY_SATURE_FILTER:
+            imageHandler->ApplyFilter(Filter::SATURE_FILTER);
+            InvalidateRect(hWnd, NULL, TRUE);
+            SetFocus(hWnd);
+            break;
         case ID_RESET_FILTER:
             //imageHandler->Reset();
             InvalidateRect(hWnd, NULL, TRUE);

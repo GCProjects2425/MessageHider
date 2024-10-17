@@ -28,6 +28,8 @@ void Interface::CreateInterface()
     elements.push_back(invertFilterButton);
     UIElement* blurFilterButton = new ActionButton(parentWindow, 1400, 340, 460, 40, ID_APPLY_BLUR_FILTER, L"Apply Blured filter");
     elements.push_back(blurFilterButton);
+    UIElement* satureFilterButton = new ActionButton(parentWindow, 1400, 400, 460, 40, ID_APPLY_SATURE_FILTER, L"Apply sature filter");
+    elements.push_back(satureFilterButton);
 
     UIElement* resetFilterButton = new ActionButton(parentWindow, 1400, 820, 460, 40, ID_RESET_FILTER, L"Reset image");
     elements.push_back(resetFilterButton);

@@ -15,6 +15,7 @@ void Filter::Apply(Bitmap* bitmap, Filters filter)
         BlurFilter(bitmap);
         break;
     case Filter::SATURE_FILTER:
+        SatureFilter(bitmap);
         break;
     default:
         break;
@@ -165,6 +166,47 @@ void Filter::BlurFilter(Bitmap* image)
             }
         }
 
+        image->UnlockBits(&bitmapData);
+    }
+}
+
+void Filter::SatureFilter(Bitmap* image)
+{
+    if (!image) return;
+
+    // Verrouiller les bits de l'image pour la lecture/écriture
+    BitmapData bitmapData;
+    Rect rect(0, 0, image->GetWidth(), image->GetHeight());
+    if (image->LockBits(&rect, ImageLockModeRead | ImageLockModeWrite, PixelFormat32bppARGB, &bitmapData) == Ok)
+    {
+        // Pointer vers le début des données d'image
+        BYTE* pixels = static_cast<BYTE*>(bitmapData.Scan0);
+        int stride = bitmapData.Stride;
+
+        float saturationLevel = 1.5f; // Niveau de saturation (1.0 = aucune modification, >1.0 = saturation accrue)
+
+        // Parcourir chaque pixel de l'image
+        for (UINT y = 0; y < image->GetHeight(); ++y)
+        {
+            for (UINT x = 0; x < image->GetWidth(); ++x)
+            {
+                BYTE* pixel = pixels + y * stride + x * 4;  // Chaque pixel a 4 octets (ARGB)
+
+                BYTE blue = pixel[0];  // Bleu
+                BYTE green = pixel[1]; // Vert
+                BYTE red = pixel[2];   // Rouge
+
+                // Calculer la luminosité moyenne (luminosité perçue)
+                float gray = 0.299f * red + 0.587f * green + 0.114f * blue;
+
+                // Appliquer la saturation en ajustant la distance par rapport à la moyenne
+                pixel[0] = static_cast<BYTE>(std::min(255.0f, gray + (blue - gray) * saturationLevel));  // Bleu
+                pixel[1] = static_cast<BYTE>(std::min(255.0f, gray + (green - gray) * saturationLevel)); // Vert
+                pixel[2] = static_cast<BYTE>(std::min(255.0f, gray + (red - gray) * saturationLevel));   // Rouge
+            }
+        }
+
+        // Déverrouiller les bits après modification
         image->UnlockBits(&bitmapData);
     }
 }
