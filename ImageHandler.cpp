@@ -130,10 +130,11 @@ bool ImageHandler::isValidImage()
 	return (m_Image != nullptr && m_Image->GetLastStatus() == Status::Ok);
 }
 
-void ImageHandler::ApplyFilter(Filter& filter)
-{
-	filter.Apply(*m_Bitmap);
-	displayImage();
+void ImageHandler::ApplyFilter(Filter& filter) {
+	if (m_Bitmap != nullptr) {
+		filter.Apply(*m_Bitmap);
+		Draw(GetDC(AppHandler::GetHWND()), 0, 0, m_Bitmap->GetWidth(), m_Bitmap->GetHeight());
+	}
 }
 
 Bitmap* ImageHandler::ToBitmap()
