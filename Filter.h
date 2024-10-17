@@ -1,12 +1,12 @@
 #pragma once
 
-#include "ImageHandler.h"
-
+#include "framework.h"
+#include <gdiplus.h>
 
 class Filter
 {
 public:
-	virtual void Apply(Bitmap& image) = 0;
+	virtual void Apply(Gdiplus::Bitmap& image) = 0;
 	virtual ~Filter() = default;
 };
 

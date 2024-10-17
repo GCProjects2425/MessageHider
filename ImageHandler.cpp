@@ -2,6 +2,7 @@
 #include "ImageHandler.h"
 #include "AppHandler.h"
 #include "ErrorHandler.h"
+#include "Filter.h"
 
 using namespace std;
 #include"Steganography.h"
