@@ -102,9 +102,9 @@ void Interface::ChangeTheme(HWND hWnd, UINT message)
     switch (message)
     {
     case ID_VIEW_LIGHTMODE:
-        elementColor = RGB(255, 255, 255);
-        borderColor = RGB(80, 80, 80);
-        bckgdColor = RGB(255, 255, 255);
+        elementColor = RGB(232, 232, 232);
+        borderColor = RGB(204, 206, 219);
+        bckgdColor = RGB(245, 245, 245);
         textColor = RGB(0, 0, 0);
         break;
 
