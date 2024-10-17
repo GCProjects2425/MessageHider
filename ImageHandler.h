@@ -41,6 +41,8 @@ private:
 	Image* m_Image;
 	Bitmap* m_Bitmap;
 	Bitmap* m_BitmapFiltered;
+	
+	Filter* m_Filter;
 
 	static void SetInstance(ImageHandler* imageHandler) { m_Instance = imageHandler; }
 
