@@ -1,12 +1,14 @@
 #pragma once
 #include "framework.h"
+#include "Filter.h"
 
 class ImageHandler
 {
 public:
-	ImageHandler()
+	ImageHandler(Filter* filter)
 		: m_Image(nullptr)
 		, m_Bitmap(nullptr)
+		, m_Filter(filter)
 	{
 		SetInstance(this);
 	};
@@ -33,9 +35,12 @@ public:
 
 	static ImageHandler* GetInstance() { return m_Instance; };
 
+	void ApplyFilter(Filter::Filters filter);
+
 private:
 	Image* m_Image;
 	Bitmap* m_Bitmap;
+	Filter* m_Filter;
 
 	static void SetInstance(ImageHandler* imageHandler) { m_Instance = imageHandler; }
 

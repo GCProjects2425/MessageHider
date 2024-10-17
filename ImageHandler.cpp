@@ -2,6 +2,7 @@
 #include "ImageHandler.h"
 #include "AppHandler.h"
 #include "ErrorHandler.h"
+#include "Filter.h"
 
 using namespace std;
 #include"Steganography.h"
@@ -177,6 +178,19 @@ std::string ImageHandler::Read()
 bool ImageHandler::isValidImage()
 {
 	return (m_Image != nullptr && m_Image->GetLastStatus() == Status::Ok);
+}
+
+void ImageHandler::ApplyFilter(Filter::Filters filter) {
+	if (isValidImage()) {
+		HCURSOR hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
+		m_Filter->Apply(m_Bitmap, filter);
+		m_Image = static_cast<Image*>(m_Bitmap);
+		SetCursor(hOldCursor);
+	}
+	else
+	{
+		ErrorHandler::GetInstance()->Error(ErrorHandler::NO_IMAGE_LOADED);
+	}
 }
 
 Bitmap* ImageHandler::ToBitmap()

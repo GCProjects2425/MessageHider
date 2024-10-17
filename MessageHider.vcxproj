@@ -156,6 +156,7 @@
     <ClInclude Include="ButtonsHeaders.h" />
     <ClInclude Include="ElementsHeaders.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="Filter.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="ImageField.h" />
     <ClInclude Include="ImageHandler.h" />
@@ -177,6 +178,7 @@
     <ClCompile Include="ButtonsHeaders.cpp" />
     <ClCompile Include="ElementsHeaders.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="Filter.cpp" />
     <ClCompile Include="ImageField.cpp" />
     <ClCompile Include="ImageHandler.cpp" />
     <ClCompile Include="Interface.cpp" />

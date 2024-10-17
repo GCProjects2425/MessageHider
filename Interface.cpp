@@ -23,6 +23,8 @@ void Interface::CreateInterface()
     elements.push_back(filtersField);*/
     UIElement* propertiesField = new Field(parentWindow, 1380, 200, 500, 680, 6, L"");
     elements.push_back(propertiesField);
+    UIElement* filterButton = new ActionButton(parentWindow, 1400, 600, 240, 40, ID_EDIT_FILTER, L"Filter");
+    elements.push_back(filterButton);
     UIElement* encryptButton = new ActionButton(parentWindow, 1380, 900, 240, 40, IDM_HIDE_MESSAGE, L"Encrypt");
     elements.push_back(encryptButton);
     UIElement* decryptButton = new ActionButton(parentWindow, 1640, 900, 240, 40, IDM_DECODE_MESSAGE, L"Decrypt");

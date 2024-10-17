@@ -12,6 +12,7 @@
 
 #include <shellapi.h>
 #include <dwmapi.h>
+
 #pragma comment(lib,"Dwmapi.lib")
 
 #define MAX_LOADSTRING 100
@@ -179,10 +180,8 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-    static HWND button;
-    static HWND testButton;
-    static HWND saveButton;
-    static ImageHandler* imageHandler = new ImageHandler();
+    static Filter* filter = new Filter();
+    static ImageHandler* imageHandler = new ImageHandler(filter);
 
     static Interface* uiInterface = new Interface(hWnd);
 
@@ -235,6 +234,11 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             break;
         case IDM_SHOW_LOGS:
             ErrorHandler::GetInstance()->OpenLogWindow((HINSTANCE)GetWindowLongPtr(hWnd, GWLP_HINSTANCE));
+            break;
+        case ID_EDIT_FILTER:
+            imageHandler->ApplyFilter(Filter::BLACKWHITE_FILTER);
+            InvalidateRect(hWnd, NULL, TRUE);
+            SetFocus(hWnd);
             break;
         case IDM_ERROR_TEST:
             ErrorHandler::GetInstance()->Error(ErrorHandler::ErrorType::ERROR_TEST);
