@@ -24,7 +24,7 @@
 #define ID_EDITION_DECRYPTER32782       32782
 #define ID_HELP_                        32783
 #define IDM_SHORTCUT_MENU               32784
-#define ID_EDIT_FILTER                  32795
+#define ID_EDIT_FILTER                  32785
 #define IDC_STATIC                      -1
 
 // Next default values for new objects

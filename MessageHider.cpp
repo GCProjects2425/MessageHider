@@ -183,6 +183,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     static ImageHandler* imageHandler = new ImageHandler();
 
     static Interface* uiInterface = new Interface(hWnd);
+    static BlackWhiteFilter* bwFilter = new BlackWhiteFilter();
 
     switch (message)
     {
@@ -205,7 +206,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         }
     case WM_COMMAND:
         {
-            BlackWhiteFilter bwFilter;
             int wmId = LOWORD(wParam);
             switch (wmId)
             {
@@ -221,14 +221,14 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             case IDM_SAVE_FILE:
                 AppHandler::SaveImage();
                 break;
-            case IDM_HIDE_MESSAGE:
-                imageHandler->Write();
-                break;
             case IDM_DECODE_MESSAGE:
                 imageHandler->Read();
                 break;
+            case IDM_HIDE_MESSAGE:
+                imageHandler->Write();
+                break;
             case ID_EDIT_FILTER:
-                imageHandler->ApplyFilter(bwFilter);
+                imageHandler->ApplyFilter(*bwFilter);
                 break;
             case IDM_ERROR_TEST:
                 ErrorHandler::GetInstance()->Error(ErrorHandler::ErrorType::ERROR_TEST);
