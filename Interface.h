@@ -2,12 +2,14 @@
 
 #include "UIElement.h"
 #include <vector>
+#include "framework.h"
+
 
 
 class Interface
 {
 public:
-    Interface(HWND parent) : parentWindow(parent) { ChangeTheme(); }
+    Interface(HWND parent) : parentWindow(parent) { ChangeTheme(parent, ID_VIEW_BLUEMODE); }
 
     ~Interface();
 
@@ -27,7 +29,7 @@ public:
     static COLORREF GetBackgroundColor() { return bckgdColor; }
     static COLORREF GetTextColor() { return textColor; }
 
-    void ChangeTheme();
+    void ChangeTheme(HWND hWnd, UINT message);
 
 
 private:

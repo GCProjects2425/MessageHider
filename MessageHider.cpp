@@ -133,6 +133,8 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 //        Dans cette fonction, nous enregistrons le handle de l'instance dans une variable globale, puis
 //        nous créons et affichons la fenêtre principale du programme.
 //
+
+HWND hWnd = nullptr;
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    hInst = hInstance; // Stocke le handle d'instance dans la variable globale
@@ -142,7 +144,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    int screenWidth = GetSystemMetrics(SM_CXSCREEN) * scale;
    int screenHeight = GetSystemMetrics(SM_CYSCREEN) * scale;
 
-   HWND hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
+    hWnd = CreateWindowW(szWindowClass, szTitle, WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
       CW_USEDEFAULT, 0, screenWidth, screenHeight, nullptr, nullptr, hInstance, nullptr);
 
    if (!hWnd)
@@ -228,7 +230,18 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             case IDM_ERROR_TEST:
                 ErrorHandler::GetInstance()->Error(ErrorHandler::ErrorType::ERROR_TEST);
                 break;
+
+            
             default:
+
+                if (ID_VIEW_LIGHTMODE <= wmId <= ID_VIEW_BLUEMODE)
+                {
+                    uiInterface->ChangeTheme(hWnd, wmId);
+                    ApplyDarkTheme(hWnd);
+
+                    break;  
+                }
+                
                 return DefWindowProc(hWnd, message, wParam, lParam);
             }
         }
@@ -238,7 +251,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
 
+
         uiInterface->HandlePaints(message);
+
 
         EndPaint(hWnd, &ps);
     }
