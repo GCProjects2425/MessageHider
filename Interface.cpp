@@ -1,6 +1,5 @@
 ﻿#include "Interface.h"
 #include "ElementsHeaders.h"
-#include "framework.h"
 
 
 Interface::~Interface(){}
@@ -14,15 +13,15 @@ void Interface::CreateInterface()
 {
     UIElement* loadImageButton = new BrowseButton(parentWindow, 20, 20, 300, 40, IDM_OPEN_FILE, L"Load Image");
     elements.push_back(loadImageButton);
-    UIElement* dataField = new Field(parentWindow, 340, 20, 1540, 40, 55, L"Image Data");
+    UIElement* dataField = new Field(parentWindow, 340, 20, 1020, 40, 55, L"Image Data");
     elements.push_back(dataField);
     UIElement* textField = new TextField(parentWindow, 20, 800, 1340, 200, 69, L"");
     elements.push_back(textField);
-    UIElement* previewField = new ImageField(parentWindow, 20, 80, 1000, 700, IDM_IMAGE_FIELD, L"");
+    UIElement* previewField = new ImageField(parentWindow, 20, 80, 1340, 700, IDM_IMAGE_FIELD, L"");
     elements.push_back(previewField);
-    UIElement* filtersField = new Field(parentWindow, 1040, 80, 320, 700, 5, L"");
-    elements.push_back(filtersField);
-    UIElement* propertiesField = new Field(parentWindow, 1380, 80, 500, 800, 6, L"");
+    /*UIElement* filtersField = new Field(parentWindow, 1040, 80, 320, 700, 5, L"");
+    elements.push_back(filtersField);*/
+    UIElement* propertiesField = new Field(parentWindow, 1380, 200, 500, 680, 6, L"");
     elements.push_back(propertiesField);
     UIElement* encryptButton = new ActionButton(parentWindow, 1380, 900, 240, 40, IDM_HIDE_MESSAGE, L"Encrypt");
     elements.push_back(encryptButton);
@@ -30,8 +29,19 @@ void Interface::CreateInterface()
     elements.push_back(decryptButton);
     UIElement* exportButton = new BrowseButton(parentWindow, 1380, 960, 500, 40, IDM_SAVE_FILE, L"Export");
     elements.push_back(exportButton);
-    UIElement* themeButton = new DropDownButton(parentWindow, 1380, 660, 350, 40, 1, L"Theme");
-    elements.push_back(themeButton);
+
+    UIElement* lightThemeButton = new ActionButton(parentWindow, 1380, 20, 240, 40, ID_VIEW_LIGHTMODE, L"Light Theme");
+    elements.push_back(lightThemeButton);
+    UIElement* darkThemeButton = new ActionButton(parentWindow, 1640, 20, 240, 40, ID_VIEW_DARKMODE, L"Dark Theme");
+    elements.push_back(darkThemeButton);
+    UIElement* redThemeButton = new ActionButton(parentWindow, 1380, 80, 240, 40, ID_VIEW_REDMODE, L"Red Theme");
+    elements.push_back(redThemeButton);
+    UIElement* limeThemeButton = new ActionButton(parentWindow, 1640, 80, 240, 40, ID_VIEW_LIMEMODE, L"Lime Theme");
+    elements.push_back(limeThemeButton);
+    UIElement* purpleThemeButton = new ActionButton(parentWindow, 1380, 140, 240, 40, ID_VIEW_PURPLEMODE, L"Purple Theme");
+    elements.push_back(purpleThemeButton);
+    UIElement* blueThemeButton = new ActionButton(parentWindow, 1640, 140, 240, 40, ID_VIEW_BLUEMODE, L"Blue Theme");
+    elements.push_back(blueThemeButton);
 
     for (UIElement* element : elements) 
     {
@@ -86,12 +96,60 @@ void Interface::ApplyTheme(LPARAM lParam)
     DeleteObject(hPen);
 }
 
-void Interface::ChangeTheme()
+void Interface::ChangeTheme(HWND hWnd, UINT message)
 {
-    elementColor = RGB(45, 45, 45);
-    borderColor = RGB(80, 80, 80);
-    bckgdColor = RGB(35, 35, 35);
-    textColor = RGB(255, 255, 255);
+
+    switch (message)
+    {
+    case ID_VIEW_LIGHTMODE:
+        elementColor = RGB(232, 232, 232);
+        borderColor = RGB(204, 206, 219);
+        bckgdColor = RGB(245, 245, 245);
+        textColor = RGB(0, 0, 0);
+        break;
+
+    case ID_VIEW_DARKMODE:
+        elementColor = RGB(45, 45, 45);
+        borderColor = RGB(80, 80, 80);
+        bckgdColor = RGB(35, 35, 35);
+        textColor = RGB(255, 255, 255);
+        break;
+
+    case ID_VIEW_REDMODE:
+        elementColor = RGB(88, 0, 0);
+        borderColor = RGB(66, 66, 66);
+        bckgdColor = RGB(57, 0, 0);
+        textColor = RGB(255, 255, 255);
+        break;
+
+    case ID_VIEW_LIMEMODE:
+        elementColor = RGB(45, 45, 45);
+        borderColor = RGB(175, 244, 0);
+        bckgdColor = RGB(35, 35, 35);
+        textColor = RGB(255, 255, 255);
+        break;
+
+    case ID_VIEW_PURPLEMODE:
+        elementColor = RGB(196, 183, 215);
+        borderColor = RGB(204, 206, 219);
+        bckgdColor = RGB(245, 245, 245);
+        textColor = RGB(51, 51, 51);
+        break;
+
+    case ID_VIEW_BLUEMODE:
+        elementColor = RGB(0, 64, 82);
+        borderColor = RGB(0, 33, 43);
+        bckgdColor = RGB(0, 43, 54);
+        textColor = RGB(240, 240, 240);
+        break;
+
+    default:
+        break;
+    }
+
+    InvalidateRect(hWnd, NULL, TRUE);
+
+
 }
     
 
