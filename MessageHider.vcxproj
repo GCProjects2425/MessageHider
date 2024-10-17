@@ -148,7 +148,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AppHandler.h" />
-    <ClInclude Include="BlackWhiteFilter.h" />
     <ClInclude Include="DropDownButton.h" />
     <ClInclude Include="ErrorHandler.h" />
     <ClInclude Include="ActionButton.h" />
@@ -171,7 +170,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AppHandler.cpp" />
-    <ClCompile Include="BlackWhiteFilter.cpp" />
     <ClCompile Include="DropDownButton.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
     <ClCompile Include="ActionButton.cpp" />

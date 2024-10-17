@@ -131,11 +131,16 @@ bool ImageHandler::isValidImage()
 	return (m_Image != nullptr && m_Image->GetLastStatus() == Status::Ok);
 }
 
-void ImageHandler::ApplyFilter(Filter& filter) {
+void ImageHandler::ApplyFilter(Filter::Filters filter) {
 	if (isValidImage()) {
-		filter.Apply(m_Bitmap);
+		HCURSOR hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
+		m_Filter->Apply(m_Bitmap, filter);
 		m_Image = static_cast<Image*>(m_Bitmap);
-		//Draw(GetDC(AppHandler::GetHWND()), 0, 0, m_Bitmap->GetWidth(), m_Bitmap->GetHeight());
+		SetCursor(hOldCursor);
+	}
+	else
+	{
+		ErrorHandler::GetInstance()->Error(ErrorHandler::NO_IMAGE_LOADED);
 	}
 }
 
