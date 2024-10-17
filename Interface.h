@@ -9,7 +9,7 @@
 class Interface
 {
 public:
-    Interface(HWND parent) : parentWindow(parent) { ChangeTheme(parent, ID_VIEW_BLUEMODE); }
+    Interface(HWND parent) : parentWindow(parent) { ChangeTheme(parent, ID_VIEW_DARKMODE); }
 
     ~Interface();
 

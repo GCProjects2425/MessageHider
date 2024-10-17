@@ -11,34 +11,39 @@ COLORREF Interface::textColor;
 
 void Interface::CreateInterface()
 {
-    UIElement* loadImageButton = new BrowseButton(parentWindow, 20, 20, 300, 40, IDM_OPEN_FILE, L"Load Image");
+    UIElement* loadImageButton = new BrowseButton(parentWindow, 20, 20, 300, 40, IDM_OPEN_FILE, L"Load image");
     elements.push_back(loadImageButton);
-    UIElement* dataField = new Field(parentWindow, 340, 20, 1020, 40, 55, L"Image Data");
+    UIElement* dataField = new Field(parentWindow, 340, 20, 1020, 40, 55, L"");
     elements.push_back(dataField);
     UIElement* textField = new TextField(parentWindow, 20, 800, 1340, 200, 69, L"");
     elements.push_back(textField);
     UIElement* previewField = new ImageField(parentWindow, 20, 80, 1340, 700, IDM_IMAGE_FIELD, L"");
     elements.push_back(previewField);
 
-    UIElement* propertiesField = new Field(parentWindow, 1380, 200, 500, 680, 6, L"");
-    elements.push_back(propertiesField);
-    UIElement* blackWhiteFilterButton = new ActionButton(parentWindow, 1400, 220, 460, 40, ID_APPLY_BLACKWHITE_FILTER, L"Apply Grayscale filter");
+    UIElement* separatorField = new Field(parentWindow, 1380, 200, 500, 2, 6, L"");
+    elements.push_back(separatorField);
+
+    UIElement* blackWhiteFilterButton = new ActionButton(parentWindow, 1400, 220, 460, 40, ID_APPLY_BLACKWHITE_FILTER, L"Apply Grayscale Filter");
     elements.push_back(blackWhiteFilterButton);
-    UIElement* invertFilterButton = new ActionButton(parentWindow, 1400, 280, 460, 40, ID_APPLY_INVERT_FILTER, L"Apply Inverted filter");
+    UIElement* invertFilterButton = new ActionButton(parentWindow, 1400, 280, 460, 40, ID_APPLY_INVERT_FILTER, L"Apply Inverted Filter");
     elements.push_back(invertFilterButton);
-    UIElement* blurFilterButton = new ActionButton(parentWindow, 1400, 340, 460, 40, ID_APPLY_BLUR_FILTER, L"Apply Blured filter");
+    UIElement* blurFilterButton = new ActionButton(parentWindow, 1400, 340, 460, 40, ID_APPLY_BLUR_FILTER, L"Apply Blured Filter");
     elements.push_back(blurFilterButton);
-    UIElement* satureFilterButton = new ActionButton(parentWindow, 1400, 400, 460, 40, ID_APPLY_SATURE_FILTER, L"Apply sature filter");
+    UIElement* satureFilterButton = new ActionButton(parentWindow, 1400, 400, 460, 40, ID_APPLY_SATURE_FILTER, L"Apply Sature Filter");
     elements.push_back(satureFilterButton);
 
-    UIElement* resetFilterButton = new ActionButton(parentWindow, 1400, 820, 460, 40, ID_RESET_FILTER, L"Reset image");
+    UIElement* resetFilterButton = new ActionButton(parentWindow, 1400, 500, 460, 40, ID_RESET_FILTER, L"Reset image");
     elements.push_back(resetFilterButton);
 
-    UIElement* encryptButton = new ActionButton(parentWindow, 1380, 900, 240, 40, IDM_HIDE_MESSAGE, L"Encrypt");
+
+    UIElement* aboutField = new Field(parentWindow, 1380, 560, 500, 320, 9, L"MessageHidder build: 2024.10.1701");
+    elements.push_back(aboutField);
+
+    UIElement* encryptButton = new ActionButton(parentWindow, 1380, 900, 240, 40, IDM_HIDE_MESSAGE, L"Encrypt message");
     elements.push_back(encryptButton);
-    UIElement* decryptButton = new ActionButton(parentWindow, 1640, 900, 240, 40, IDM_DECODE_MESSAGE, L"Decrypt");
+    UIElement* decryptButton = new ActionButton(parentWindow, 1640, 900, 240, 40, IDM_DECODE_MESSAGE, L"Decrypt message");
     elements.push_back(decryptButton);
-    UIElement* exportButton = new BrowseButton(parentWindow, 1380, 960, 500, 40, IDM_SAVE_FILE, L"Export");
+    UIElement* exportButton = new BrowseButton(parentWindow, 1380, 960, 500, 40, IDM_SAVE_FILE, L"Export image");
     elements.push_back(exportButton);
 
     UIElement* lightThemeButton = new ActionButton(parentWindow, 1380, 20, 240, 40, ID_VIEW_LIGHTMODE, L"Light Theme");
