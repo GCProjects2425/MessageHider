@@ -79,35 +79,27 @@ void Interface::ApplyTheme(LPARAM lParam)
     
     HDC hdc = pDIS->hDC;
 
-    // Créer les pinceaux et stylos
     HBRUSH hBrush = CreateSolidBrush(elementColor);
     HBRUSH hBgBrush = CreateSolidBrush(bckgdColor);
     HPEN hPen = CreatePen(PS_SOLID, 2, borderColor);
 
-    // Sélectionner les nouveaux pinceaux et stylos
     HBRUSH oldBrush = (HBRUSH)SelectObject(hdc, hBrush);
     HPEN oldPen = (HPEN)SelectObject(hdc, hPen);
 
-    // Remplir la zone avec le fond du bouton pour masquer toute couleur blanche résiduelle
     FillRect(hdc, &pDIS->rcItem, hBgBrush);
-
-    // Dessiner le bouton avec des bords arrondis
     RoundRect(hdc, pDIS->rcItem.left, pDIS->rcItem.top, pDIS->rcItem.right, pDIS->rcItem.bottom, 20, 20);
 
 
     WCHAR text[256];
     GetWindowText(pDIS->hwndItem, text, sizeof(text));
 
-    // Dessiner le texte
     SetTextColor(hdc, textColor);
-    SetBkMode(hdc, TRANSPARENT);  // Fond transparent pour le texte
+    SetBkMode(hdc, TRANSPARENT);
     DrawText(hdc, text, -1, &pDIS->rcItem, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 
-    // Restaurer les anciens objets GDI
     SelectObject(hdc, oldBrush);
     SelectObject(hdc, oldPen);
 
-    // Nettoyer
     DeleteObject(hBrush);
     DeleteObject(hPen);
 }

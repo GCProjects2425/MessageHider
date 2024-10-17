@@ -23,7 +23,7 @@ void EnableDarkModeForTitleBar(HWND hwnd)
     DwmSetWindowAttribute(hwnd, 20, &darkmode, sizeof(darkmode));
 }
 
-void ApplyDarkTheme(HWND hwnd)
+void ApplyTheme(HWND hwnd)
 {
     HBRUSH darkBrush = CreateSolidBrush(Interface::GetBackgroundColor());
     SetClassLongPtr(hwnd, GCLP_HBRBACKGROUND, (LONG_PTR)darkBrush);
@@ -160,7 +160,7 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    AppHandler::SetHWND(hWnd);
 
    EnableDarkModeForTitleBar(hWnd);
-   ApplyDarkTheme(hWnd);
+   ApplyTheme(hWnd);
 
    ShowWindow(hWnd, nCmdShow);
    UpdateWindow(hWnd);
@@ -272,8 +272,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             if (ID_VIEW_LIGHTMODE <= wmId <= ID_VIEW_BLUEMODE)
             {
                 uiInterface->ChangeTheme(hWnd, wmId);
-                ApplyDarkTheme(hWnd);
-
+                ApplyTheme(hWnd);
                 break;  
             }
                 

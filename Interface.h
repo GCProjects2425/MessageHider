@@ -35,9 +35,9 @@ public:
 private:
     HWND parentWindow;
 
-    static COLORREF elementColor;  // Couleur de fond
+    static COLORREF elementColor;  // Couleur de fond d'element
     static COLORREF borderColor;  // Couleur de la bordure
-    static COLORREF bckgdColor;  // Couleur de la bordure
+    static COLORREF bckgdColor;  // Couleur de background
     static COLORREF textColor; // Couleur du texte
 
 };
