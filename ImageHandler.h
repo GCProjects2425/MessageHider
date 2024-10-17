@@ -37,6 +37,8 @@ public:
 
 	void ApplyFilter(Filter::Filters filter);
 
+	void Reset();
+
 private:
 	Image* m_Image;
 	Bitmap* m_Bitmap;

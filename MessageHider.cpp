@@ -261,7 +261,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             SetFocus(hWnd);
             break;
         case ID_RESET_FILTER:
-            //imageHandler->Reset();
+            imageHandler->Reset();
             InvalidateRect(hWnd, NULL, TRUE);
             SetFocus(hWnd);
             break;

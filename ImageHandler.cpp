@@ -28,6 +28,9 @@ bool ImageHandler::Load(const wchar_t* filePath){
 	info += L"Resolution : " + std::to_wstring(width) + L"x" + std::to_wstring(height) + L" | MIME Type : " + GetMimeType();
 	SetWindowText(hStatic, info.c_str());
 
+	// Copie de l'image pour la sauvegarder en cas de futur filtres
+	m_BitmapFiltered = m_Bitmap->Clone(0, 0, m_Bitmap->GetWidth(), m_Bitmap->GetHeight(), m_Bitmap->GetPixelFormat());
+
     return isValidImage();
 }
 
@@ -74,13 +77,10 @@ void ImageHandler::Write()
 
 void ImageHandler::Save(const wchar_t* filePath)
 {
-	// Vérifie que l'image est valide avant de continuer
 	if (isValidImage())
 	{
-		// Conversion de l'image en Bitmap GDI+
 		if (m_Bitmap == nullptr)
 		{
-			// Gestion d'erreur : échec de la conversion en Bitmap
 			return;
 		}
 
@@ -180,17 +180,24 @@ bool ImageHandler::isValidImage()
 	return (m_Image != nullptr && m_Image->GetLastStatus() == Status::Ok);
 }
 
-void ImageHandler::ApplyFilter(Filter::Filters filter) {
+void ImageHandler::ApplyFilter(Filter::Filters filter) 
+{
 	if (isValidImage()) {
+
 		HCURSOR hOldCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
-		m_Filter->Apply(m_Bitmap, filter);
-		m_Image = static_cast<Image*>(m_Bitmap);
+		m_Filter->Apply(m_BitmapFiltered, filter);
+		m_Image = static_cast<Image*>(m_BitmapFiltered);
 		SetCursor(hOldCursor);
 	}
 	else
 	{
 		ErrorHandler::GetInstance()->Error(ErrorHandler::NO_IMAGE_LOADED);
 	}
+}
+
+void ImageHandler::Reset()
+{
+	m_Image = static_cast<Image*>(m_Bitmap);
 }
 
 Bitmap* ImageHandler::ToBitmap()
