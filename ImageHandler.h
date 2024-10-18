@@ -33,6 +33,8 @@ public:
 	const wchar_t* GetMimeType();
 
 	bool isValidImage();
+	int GetImageWidth();
+	int GetImageHeight();
 
 	static ImageHandler* GetInstance() { return m_Instance; };
 

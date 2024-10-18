@@ -180,6 +180,16 @@ bool ImageHandler::isValidImage()
 	return (m_Image != nullptr && m_Image->GetLastStatus() == Status::Ok);
 }
 
+int ImageHandler::GetImageWidth()
+{
+	return m_Image->GetWidth();
+}
+
+int ImageHandler::GetImageHeight()
+{
+	return m_Image->GetHeight();
+}
+
 void ImageHandler::ApplyFilter(Filter::Filters filter) 
 {
 	if (isValidImage()) {
