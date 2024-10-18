@@ -94,16 +94,6 @@ void ErrorHandler::TriggerError()
     );
 
     m_stateClick = msgBox;
-    /*if (msgBox == IDYES)
-    {
-        // L'utilisateur a choisi "Oui"
-        MessageBox(*m_parentHwnd, L"Vous avez choisi Oui", L"Résultat", MB_OK);
-    }
-    else if (msgBox == IDNO)
-    {
-        // L'utilisateur a choisi "Non"
-        MessageBox(*m_parentHwnd, L"Vous avez choisi Non", L"Résultat", MB_OK);
-    }*/
 }
 
 LRESULT ErrorHandler::LogWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)

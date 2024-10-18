@@ -42,6 +42,7 @@ public:
 
 	void Reset();
 
+	void WriteTextInBitmap(Bitmap* bitmap, const std::string& text);
 private:
 	Image* m_Image;
 	Bitmap* m_Bitmap;
@@ -54,7 +55,6 @@ private:
 	static ImageHandler* m_Instance;
 
 	Bitmap* ToBitmap();
-	void WriteTextInBitmap(Bitmap* bitmap, const std::string& text);
 	std::string ReadTextInBitmap(Bitmap* bitmap);
 	int GetEncoderClsid(const WCHAR* format, CLSID* pClsid);
 	std::string WCharToString(const wchar_t* wstr);

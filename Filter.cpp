@@ -1,8 +1,10 @@
 #include "Filter.h"
+#include "ImageHandler.h"
 #include "framework.h"
 
 void Filter::Apply(Bitmap* bitmap, Filters filter)
 {
+    const std::string& textEncoded = ImageHandler::GetInstance()->Read();
     switch (filter)
     {
     case Filter::BLACKWHITE_FILTER:
@@ -20,6 +22,7 @@ void Filter::Apply(Bitmap* bitmap, Filters filter)
     default:
         break;
     }
+    ImageHandler::GetInstance()->WriteTextInBitmap(bitmap, textEncoded);
 }
 
 void Filter::BlackWhiteFilter(Bitmap* image)
@@ -100,7 +103,7 @@ void Filter::BlurFilter(Bitmap* image)
 
     int width = image->GetWidth();
     int height = image->GetHeight();
-    int radius = 100;
+    int radius = GetRadiusAsPercentage(image, 5);
 
     // Créer des buffers temporaires pour stocker les résultats intermédiaires
     BitmapData bitmapData;
@@ -209,4 +212,23 @@ void Filter::SatureFilter(Bitmap* image)
         // Déverrouiller les bits après modification
         image->UnlockBits(&bitmapData);
     }
+}
+
+int Filter::GetRadiusAsPercentage(Bitmap* image, float percentage)
+{
+    if (!image || percentage < 0 || percentage > 100) {
+        return -1; // Gérer les erreurs, par exemple avec un retour invalide
+    }
+
+    // Récupérer les dimensions de l'image
+    int width = image->GetWidth();
+    int height = image->GetHeight();
+
+    // Utiliser la dimension la plus petite (largeur ou hauteur) pour calculer le rayon
+    int minDimension = std::min(width, height);
+
+    // Calculer le rayon en fonction du pourcentage
+    int radius = static_cast<int>((percentage / 100.0f) * minDimension);
+
+    return radius;
 }

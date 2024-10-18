@@ -23,16 +23,16 @@ void Interface::CreateInterface()
     UIElement* separatorField = new Field(parentWindow, 1380, 200, 500, 2, 6, L"");
     elements.push_back(separatorField);
 
-    UIElement* blackWhiteFilterButton = new ActionButton(parentWindow, 1400, 220, 460, 40, ID_APPLY_BLACKWHITE_FILTER, L"Apply Grayscale Filter");
+    UIElement* blackWhiteFilterButton = new ActionButton(parentWindow, 1380, 220, 500, 40, ID_APPLY_BLACKWHITE_FILTER, L"Apply Grayscale Filter");
     elements.push_back(blackWhiteFilterButton);
-    UIElement* invertFilterButton = new ActionButton(parentWindow, 1400, 280, 460, 40, ID_APPLY_INVERT_FILTER, L"Apply Inverted Filter");
+    UIElement* invertFilterButton = new ActionButton(parentWindow, 1380, 280, 500, 40, ID_APPLY_INVERT_FILTER, L"Apply Inverted Filter");
     elements.push_back(invertFilterButton);
-    UIElement* blurFilterButton = new ActionButton(parentWindow, 1400, 340, 460, 40, ID_APPLY_BLUR_FILTER, L"Apply Blured Filter");
+    UIElement* blurFilterButton = new ActionButton(parentWindow, 1380, 340, 500, 40, ID_APPLY_BLUR_FILTER, L"Apply Blured Filter");
     elements.push_back(blurFilterButton);
-    UIElement* satureFilterButton = new ActionButton(parentWindow, 1400, 400, 460, 40, ID_APPLY_SATURE_FILTER, L"Apply Sature Filter");
+    UIElement* satureFilterButton = new ActionButton(parentWindow, 1380, 400, 500, 40, ID_APPLY_SATURE_FILTER, L"Apply Sature Filter");
     elements.push_back(satureFilterButton);
 
-    UIElement* resetFilterButton = new ActionButton(parentWindow, 1400, 500, 460, 40, ID_RESET_FILTER, L"Reset image");
+    UIElement* resetFilterButton = new ActionButton(parentWindow, 1380, 500, 500, 40, ID_RESET_FILTER, L"Reset image");
     elements.push_back(resetFilterButton);
 
 

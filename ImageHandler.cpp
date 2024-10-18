@@ -8,8 +8,8 @@ using namespace std;
 #include"Steganography.h"
 void ImageHandler::DestroyImage()
 {
-	delete m_Image;  // Supprimer l'image pr�c�dente si elle existe
-	delete m_Bitmap;
+	delete m_Image;
+	m_Image = nullptr;
 }
 
 bool ImageHandler::Load(const wchar_t* filePath){
@@ -37,8 +37,10 @@ bool ImageHandler::Load(const wchar_t* filePath){
 void ImageHandler::Draw(HDC hdc, int x, int y, int width, int height) {
 	if (isValidImage()) 
 	{
+		int maxWidth = 1280;
+		int maxHeight = 720;
 		Graphics graphics(hdc);
-		graphics.DrawImage(m_Image, x, y, width, height); 
+		graphics.DrawImage(m_Image, x, y, width, height);
 	}
 	else
 	{
@@ -63,7 +65,7 @@ void ImageHandler::Write()
 		GetWindowText(hTextField, buffer, textLength);
 		//GetDlgItemText(AppHandler::GetHWND(), 69, buffer, imageLength);
 
-		WriteTextInBitmap(m_Bitmap, WCharToString(buffer));
+		WriteTextInBitmap(m_BitmapFiltered, WCharToString(buffer));
 
 		SetWindowText(hTextField, L"");
 
@@ -79,13 +81,15 @@ void ImageHandler::Save(const wchar_t* filePath)
 {
 	if (isValidImage())
 	{
-		if (m_Bitmap == nullptr)
+		if (m_Bitmap == nullptr || m_BitmapFiltered == nullptr)
 		{
 			return;
 		}
 
 		CLSID imageClsid;
 		wstring fileExtension = filePath;
+
+		m_Bitmap = m_BitmapFiltered->Clone(0, 0, m_BitmapFiltered->GetWidth(), m_BitmapFiltered->GetHeight(), m_BitmapFiltered->GetPixelFormat());
 
 		try
 		{
@@ -162,7 +166,7 @@ std::string ImageHandler::Read()
 	std::string textEncoded = "";
 	if (isValidImage())
 	{
-		textEncoded = ReadTextInBitmap(m_Bitmap);
+		textEncoded = ReadTextInBitmap(m_BitmapFiltered);
 		HWND hTextField = GetDlgItem(AppHandler::GetHWND(), 69);
 		SetWindowText(hTextField, ConvertToWideString(textEncoded).c_str());
 		//MessageBoxA(AppHandler::GetHWND(), textEncoded.c_str(), "Test", 0);

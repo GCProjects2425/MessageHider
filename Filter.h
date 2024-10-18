@@ -22,5 +22,7 @@ private:
 	void InvertFilter(Bitmap* image);
 	void BlurFilter(Bitmap* image);
 	void SatureFilter(Bitmap* image);
+
+	int GetRadiusAsPercentage(Bitmap* image, float percentage);
 };
 

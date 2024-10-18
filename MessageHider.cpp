@@ -170,6 +170,31 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
    return TRUE;
 }
 
+bool isWriting = false;
+
+void EnableRedraw(HWND hTextField, BOOL enable) {
+    SendMessage(hTextField, WM_SETREDRAW, enable, 0);
+    if (enable) {
+        InvalidateRect(hTextField, NULL, TRUE); // Forcer un redessin complet
+    }
+}
+
+// Fonction pour désactiver le redessin lorsque l'utilisateur commence à écrire
+void OnKeyDown(HWND hFocused) {
+    if (!isWriting) {
+        isWriting = true;
+        EnableRedraw(hFocused, FALSE); // Désactiver le redessin
+    }
+}
+
+// Fonction pour réactiver le redessin lorsque l'utilisateur arrête d'écrire
+void OnKeyUp(HWND hFocused) {
+    if (isWriting) {
+        isWriting = false;
+        EnableRedraw(hFocused, TRUE); // Réactiver le redessin
+    }
+}
+
 //
 //  FONCTION : WndProc(HWND, UINT, WPARAM, LPARAM)
 //
@@ -193,6 +218,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         uiInterface->CreateInterface();
         break;
     case WM_KEYDOWN:
+    {
+        HWND hTextField = GetDlgItem(hWnd, 69);
+        if (GetFocus() == hTextField) {  // Si le focus est sur le champ texte
+            OnKeyDown(hTextField);            // Désactiver le redessin
+        }
+
         if (GetKeyState(VK_CONTROL) & 0x8000)
         {
             switch (wParam)
@@ -211,9 +242,26 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                 break;
             }
         }
+        break;
+    }
+    case WM_KEYUP: {
+        HWND hTextField = GetDlgItem(hWnd, 69);
+        if (GetFocus() == hTextField) {  // Si le focus est sur le champ texte
+            OnKeyUp(hTextField);              // Réactiver le redessin
+        }
+        break;
+    }
     case WM_COMMAND:
     {
         int wmId = LOWORD(wParam);
+
+        if (HIWORD(wParam) == EN_CHANGE && wmId == 69) {
+            HWND hTextField = GetDlgItem(hWnd, 69);
+            SendMessage(hTextField, WM_SETREDRAW, FALSE, 0);
+
+            SendMessage(hTextField, WM_SETREDRAW, TRUE, 0);
+        }
+
         switch (wmId)
         {
         case IDM_ABOUT:
@@ -287,9 +335,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         PAINTSTRUCT ps;
         HDC hdc = BeginPaint(hWnd, &ps);
 
-
         uiInterface->HandlePaints(message);
-
 
         EndPaint(hWnd, &ps);
 
