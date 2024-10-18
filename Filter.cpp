@@ -41,17 +41,17 @@ void Filter::BlackWhiteFilter(Bitmap* image)
         {
             BYTE* pixel = pixels + y * bitmapData.Stride + x * 4;  // Chaque pixel a 4 octets (ARGB)
 
-            BYTE blue = pixel[0];  // Bleu
-            BYTE green = pixel[1]; // Vert
-            BYTE red = pixel[2];   // Rouge
+            BYTE blue = pixel[0]; 
+            BYTE green = pixel[1];
+            BYTE red = pixel[2];  
 
             // Calcul de la luminosité (formule standard pour convertir en niveaux de gris)
             BYTE gray = static_cast<BYTE>(0.299 * red + 0.587 * green + 0.114 * blue);
 
             // Remplacer les valeurs R, G, B par la valeur de gris
-            pixel[0] = gray;  // Bleu
-            pixel[1] = gray;  // Vert
-            pixel[2] = gray;  // Rouge
+            pixel[0] = gray; 
+            pixel[1] = gray; 
+            pixel[2] = gray; 
         }
     }
 

@@ -8,6 +8,7 @@ public:
 	ImageHandler(Filter* filter)
 		: m_Image(nullptr)
 		, m_Bitmap(nullptr)
+		, m_BitmapFiltered(nullptr)
 		, m_Filter(filter)
 	{
 		SetInstance(this);
