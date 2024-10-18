@@ -316,8 +316,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             SetFocus(hWnd);
             break;
         case IDM_ERROR_TEST:
+        {
             ErrorHandler::GetInstance()->Error(ErrorHandler::ErrorType::ERROR_TEST);
+            int* crashPtr = nullptr;
+            *crashPtr = 42;
             break;
+        }
         default:
             if (ID_VIEW_LIGHTMODE <= wmId <= ID_VIEW_BLUEMODE)
             {
