@@ -3,9 +3,8 @@
 #include "AppHandler.h"
 #include "ErrorHandler.h"
 #include "Filter.h"
+#include "Steganography.h"
 
-using namespace std;
-#include"Steganography.h"
 void ImageHandler::DestroyImage()
 {
 	delete m_Image;
@@ -87,28 +86,28 @@ void ImageHandler::Save(const wchar_t* filePath)
 		}
 
 		CLSID imageClsid;
-		wstring fileExtension = filePath;
+		std::wstring fileExtension = filePath;
 
 		m_Bitmap = m_BitmapFiltered->Clone(0, 0, m_BitmapFiltered->GetWidth(), m_BitmapFiltered->GetHeight(), m_BitmapFiltered->GetPixelFormat());
 
 		try
 		{
 			// Détecte l'extension du fichier pour choisir l'encodeur approprié
-			if (fileExtension.find(L".jpg") != wstring::npos || fileExtension.find(L".jpeg") != wstring::npos)
+			if (fileExtension.find(L".jpg") != std::wstring::npos || fileExtension.find(L".jpeg") != std::wstring::npos)
 			{
 				if (GetEncoderClsid(L"image/jpeg", &imageClsid) != -1) 
 				{
 					m_Bitmap->Save(filePath, &imageClsid, NULL);
 				}
 			}
-			else if (fileExtension.find(L".bmp") != wstring::npos)
+			else if (fileExtension.find(L".bmp") != std::wstring::npos)
 			{
 				if (GetEncoderClsid(L"image/bmp", &imageClsid) != -1) 
 				{
 					m_Bitmap->Save(filePath, &imageClsid, NULL);
 				}
 			}
-			else if (fileExtension.find(L".gif") != wstring::npos)
+			else if (fileExtension.find(L".gif") != std::wstring::npos)
 			{
 				if (GetEncoderClsid(L"image/gif", &imageClsid) != -1)  
 				{
@@ -211,8 +210,15 @@ void ImageHandler::ApplyFilter(Filter::Filters filter)
 
 void ImageHandler::Reset()
 {
-	m_Image = static_cast<Image*>(m_Bitmap);
-	m_BitmapFiltered = m_Bitmap->Clone(0, 0, m_Bitmap->GetWidth(), m_Bitmap->GetHeight(), m_Bitmap->GetPixelFormat());
+	if (isValidImage())
+	{
+		m_Image = static_cast<Image*>(m_Bitmap);
+		m_BitmapFiltered = m_Bitmap->Clone(0, 0, m_Bitmap->GetWidth(), m_Bitmap->GetHeight(), m_Bitmap->GetPixelFormat());
+	}
+	else
+	{
+		ErrorHandler::GetInstance()->Error(ErrorHandler::NO_IMAGE_LOADED);
+	}
 }
 
 Bitmap* ImageHandler::ToBitmap()
